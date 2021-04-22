@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "prueba",
-    "slug": "prueba",
+    "name": "proyecto",
+    "slug": "proyecto",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
