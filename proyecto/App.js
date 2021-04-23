@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as Font from 'expo-font';
 import Home from './screens/Home';
 import AppLoading from 'expo-app-loading';
-import Navigator from './routes/HomeStack'
+import Navigator from './routes/Drawer'
 
 const getFonts = () => Font.loadAsync({
   'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
