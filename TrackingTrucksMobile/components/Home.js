@@ -12,7 +12,7 @@ import Arrow from './multimedia/backArrow.svg'
 
 class Home extends Component {
     render() {
-        const {navigation} = this.props
+        const { navigation } = this.props
         const pressBackHandler = () => {
             navigation.goBack()
         }
@@ -21,6 +21,7 @@ class Home extends Component {
             <View>
                 <TouchableOpacity>
                     <Settings style={{ marginLeft: 20, marginTop: 20 }} />
+                    <Text></Text>
                 </TouchableOpacity>
             </View>
         )
@@ -29,20 +30,20 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
     container: {
-      alignItems: "center",
-      marginTop: 70
+        alignItems: "center",
+        marginTop: 70
     },
     arrow: {
-      alignSelf: 'flex-start',
-      marginLeft: '5%',
-      marginTop: '10%'
+        alignSelf: 'flex-start',
+        marginLeft: '5%',
+        marginTop: '10%'
     },
     bottom: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginRight: '5%',
         marginTop: '5%'
-      },
-  });
+    },
+});
 
 export default Home

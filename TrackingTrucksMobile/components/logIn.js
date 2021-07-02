@@ -6,16 +6,44 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  Alert
 } from 'react-native';
+import Config from './Config'
 import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
 import Arrow from './multimedia/backArrow.svg'
 import BlackLogo from './multimedia/blackLogo.svg'
+import axios from 'axios'
 
 class Login extends Component {
+  state = {
+    password: '',
+    email: '',
+  }
   render() {
-    const {navigation} = this.props
-    const pressLogHandler = () => {
-      navigation.navigate('Home')
+    const { navigation } = this.props
+    const pressLogHandler = async () => {
+      try {
+        const res = await axios.post(Config.API_URL + '/auth/login', {
+          password: this.state.password,
+          email: this.state.email,
+        })
+        global.accessToken = res.data.accessToken
+        global.refreshToken = res.data.refreshToken
+        global.ATExpires = res.data.ATExpiresIn
+        global.RTexpire = res.data.RTExpiresIn
+        console.log(res.data)
+        navigation.navigate('Home')
+      } catch (error) {
+        console.log(error.response.data.message || error.message)
+        Alert.alert(
+          "Error",
+          error.response.data.message,
+          [
+            { text: 'OK', onPress: () => { } },
+          ]
+        )
+      }
+      
     }
 
     const pressBackHandler = () => {
@@ -28,17 +56,22 @@ class Login extends Component {
           <Text style={styles.textTitle}>¡Bienvenido!</Text>
           <Text style={styles.textLogIn}>Inicio de sesión</Text>
           <View style={styles.inputsContainer}>
-            <Text style={styles.mail} >Mail  </Text>
+            <Text style={styles.mail} >Mail </Text>
             <TextInput
               style={styles.input}
+              onChangeText={(e) => this.setState({email: e})}
             />
             <Text style={styles.mail} >Contraseña</Text>
             <TextInput
               style={styles.input}
+              onChangeText={(e) => {
+                this.setState({password: e})              
+              }}
             />
           </View>
           <TouchableOpacity
             style={styles.logButton}
+            disabled={true}
           >
             <Text style={styles.logText} onPress={pressLogHandler}>Iniciar Sesion</Text>
           </TouchableOpacity>
@@ -121,7 +154,7 @@ const styles = StyleSheet.create({
     height: 40,
     margin: 12,
     borderWidth: 0,
-    color: "#0000",
+    color: "black",
     borderRadius: 6,
     backgroundColor: "#C4C4C4",
   },
