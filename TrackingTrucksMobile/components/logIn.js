@@ -18,10 +18,13 @@ class Login extends Component {
   state = {
     password: '',
     email: '',
+    disableButton: false
   }
   render() {
     const { navigation } = this.props
     const pressLogHandler = async () => {
+      this.setState({disableButton: true})              
+      if (this.state.disableButton) return console.log("disabled!!");
       try {
         const res = await axios.post(Config.API_URL + '/auth/login', {
           password: this.state.password,
@@ -31,9 +34,12 @@ class Login extends Component {
         global.refreshToken = res.data.refreshToken
         global.ATExpires = res.data.ATExpiresIn
         global.RTexpire = res.data.RTExpiresIn
+        global.perfil = res.data.perfil
         console.log(res.data)
+        this.setState({disableButton: false})              
         navigation.navigate('Home')
       } catch (error) {
+        this.setState({disableButton: false})              
         console.log(error.response.data.message || error.message)
         Alert.alert(
           "Error",
@@ -71,7 +77,8 @@ class Login extends Component {
           </View>
           <TouchableOpacity
             style={styles.logButton}
-            disabled={true}
+            disabled={this.state.disableButton}
+            activeOpacity={this.state.disableButton ? 1 : 0.7}
           >
             <Text style={styles.logText} onPress={pressLogHandler}>Iniciar Sesion</Text>
           </TouchableOpacity>

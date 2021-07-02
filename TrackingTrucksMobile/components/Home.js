@@ -10,6 +10,7 @@ import {
 import Settings from './multimedia/settings.svg'
 import Arrow from './multimedia/backArrow.svg'
 
+
 class Home extends Component {
     render() {
         const { navigation } = this.props
@@ -21,8 +22,11 @@ class Home extends Component {
             <View>
                 <TouchableOpacity>
                     <Settings style={{ marginLeft: 20, marginTop: 20 }} />
-                    <Text></Text>
+                    <Text>Hola {global.perfil.nombre} {global.perfil.apellido}</Text>
+                    <Text>Tu compania es {global.perfil.companyId}</Text>
+                    <Text>Estas despedido!</Text>
                 </TouchableOpacity>
+                
             </View>
         )
     }

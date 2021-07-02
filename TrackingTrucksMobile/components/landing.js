@@ -12,7 +12,7 @@ import Logo from './multimedia/logo.svg'
 class Landing extends Component {
   render() {
     const pressHandler = () => {
-      this.props.navigation.navigate('logIn', {
+      this.props.navigation.navigate('ObdReader', {
         itemId: 86,
         otherParam: 'anything you want here'
       })

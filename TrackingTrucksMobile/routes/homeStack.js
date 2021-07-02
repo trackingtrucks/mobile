@@ -25,7 +25,6 @@ const screens = {
             headerShown: false
         }
     }
-
 }
 
 const HomeStack = createStackNavigator(screens);

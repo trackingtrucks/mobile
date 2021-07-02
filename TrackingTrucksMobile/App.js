@@ -6,11 +6,13 @@ import {
 } from 'react-native';
 import Landing from './components/landing'
 import Navigator from './routes/homeStack'
+import ObdReader from './components/ObdReader'
 
 const App = () => {
   return (
     <View style={styles.fondo}>
-      <Navigator />
+      {/*<Navigator />*/}
+       <ObdReader/> 
     </View>
   );
 };
