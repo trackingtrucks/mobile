@@ -26,7 +26,7 @@ class Home extends Component {
                     <TouchableOpacity>
                         <Settings style={styles.settings} />
                     </TouchableOpacity>
-                    <Logo width="65" height="65" style={{ marginTop: -8 }} />
+                    <Logo width="65" height="65" style={styles.logo} />
                     <View style={styles.nombre}>
                         <Text>{global.perfil.nombre}</Text>
                         <Text>{global.perfil.rol}</Text>
@@ -51,6 +51,9 @@ const styles = StyleSheet.create({
     },
     settings:{
 
+    },
+    logo:{
+        
     }
 });
 
