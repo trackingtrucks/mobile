@@ -1,9 +1,11 @@
+'use strict'
+
 import React, { Component, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Layout,  Alert } from 'react-native'
+import { View, Text, FlatList, StyleSheet, DeviceEventEmitter, MenuContext, NavigationBar, Menu, MenuTrigger, MenuOption, MenuOptions, ScrollView, TouchableOpacity, AppState, Alert } from 'react-native'
 
 const obd2 = require('react-native-obd2');
 
-class ObdReader extends Component {
+export default class bluetoothList extends Component {
   constructor(props) {
     super()
     this.state = {
@@ -135,7 +137,6 @@ class ObdReader extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <Layout title={"Hola"} />
         <TouchableOpacity
           style={styles.button}
           onPress={() => this.scan()}
@@ -190,5 +191,3 @@ const styles = StyleSheet.create({
     padding: 10
   },
 })
-
-export default ObdReader;

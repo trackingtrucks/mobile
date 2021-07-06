@@ -7,8 +7,10 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native';
+import ObdReader from './ObdReader'
 import Settings from './multimedia/settings.svg'
 import Arrow from './multimedia/backArrow.svg'
+import Logo from './multimedia/logo.svg'
 
 
 class Home extends Component {
@@ -19,14 +21,18 @@ class Home extends Component {
         }
 
         return (
-            <View>
-                <TouchableOpacity>
-                    <Settings style={{ marginLeft: 20, marginTop: 20 }} />
-                    <Text>Hola {global.perfil.nombre} {global.perfil.apellido}</Text>
-                    <Text>Tu compania es {global.perfil.companyId}</Text>
-                    <Text>Estas despedido!</Text>
-                </TouchableOpacity>
-                
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <TouchableOpacity>
+                        <Settings style={styles.settings} />
+                    </TouchableOpacity>
+                    <Logo width="65" height="65" style={{ marginTop: -8 }} />
+                    <View style={styles.nombre}>
+                        <Text>{global.perfil.nombre}</Text>
+                        <Text>{global.perfil.rol}</Text>
+                    </View>
+                </View>
+                <ObdReader />
             </View>
         )
     }
@@ -34,20 +40,18 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: "center",
-        marginTop: 70
+        flex: 1,
+        marginTop: 20,
     },
-    arrow: {
-        alignSelf: 'flex-start',
-        marginLeft: '5%',
-        marginTop: '10%'
+    header: {
+        flexDirection: "row",
+        justifyContent:"space-between"
     },
-    bottom: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginRight: '5%',
-        marginTop: '5%'
+    nombre:{
     },
+    settings:{
+
+    }
 });
 
 export default Home
