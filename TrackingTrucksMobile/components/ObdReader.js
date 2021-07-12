@@ -1,11 +1,20 @@
 'use strict'
 
 import React, { Component, useState } from 'react'
-import { View, Text, FlatList, StyleSheet, DeviceEventEmitter, MenuContext, NavigationBar, Menu, MenuTrigger, MenuOption, MenuOptions, ScrollView, TouchableOpacity, AppState, Alert } from 'react-native'
+import { View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity, Alert } from 'react-native'
+import { Cache } from 'react-native-cache';
+import MemoryStore from './memoryStore'
 
 const obd2 = require('react-native-obd2');
+const cache = new Cache({
+  namespace: "ObdReader",
+  policy: {
+      maxEntries: 50000
+  },
+  backend: MemoryStore
+});
 
-export default class bluetoothList extends Component {
+export default class ObdReader extends Component {
   constructor(props) {
     super()
     this.state = {
@@ -47,7 +56,6 @@ export default class bluetoothList extends Component {
     obd2.ready();
     obd2.getBluetoothDeviceNameList()
       .then((nameList) => {
-        console.log('Bluetooth device list : ' + JSON.stringify(nameList));
         this.setState({ btDeviceList: nameList });
         let deviceForUI = nameList.map((item, index) => {
           if (item.address === this.props.btSelectedDeviceAddress) {
@@ -57,7 +65,6 @@ export default class bluetoothList extends Component {
             this.setState({
               btSelectedDeviceAddress: item.address,
             })
-            console.log("OBD2:" + this.state.btSelectedDeviceAddress.length)
           }
         });
         this.setState({ btDeviceListForUI: deviceForUI });
@@ -99,7 +106,7 @@ export default class bluetoothList extends Component {
     });
     if (data.cmdID === 'ENGINE_RPM') {
       this.setState({
-        rpm: data.cmdResult,
+        rpm: data.cmdResult
       });
     }
     if (data.cmdID === 'SPEED') {
@@ -142,6 +149,11 @@ export default class bluetoothList extends Component {
           onPress={() => this.scan()}
         >
           <Text>Scanear</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+        >
+          <Text>Cache Test</Text>
         </TouchableOpacity>
         <Text>
           Este es el status del device:
