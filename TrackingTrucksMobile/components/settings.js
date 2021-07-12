@@ -12,15 +12,21 @@ import Config from './Config';
 
 class Settings extends Component {
     render() {
-        const pressLogOutHandler = () => {
-            axios.delete(Config.API_URL, '/auth/token', {
-                headers: {
-                    "x-refresh-token": global.refreshToken,
-                    "x-access-token": global.accessToken
-                }
-            })
-            const { navigation } = this.props
-            navigation.navigate('Landing')
+        const { navigation } = this.props
+        const pressLogOutHandler = async () => {
+            console.log(global.refreshToken)
+            try {
+                await axios.delete(Config.API_URL, '/auth/token', {
+                    headers: {
+                        "x-refresh-token": global.refreshToken,
+                        "x-access-token": global.accessToken
+                    }
+                })
+                navigation.navigate('Landing')
+            }
+            catch (error) {
+                console.error(error.response.data.message)
+            }
         }
         return (
             <View style={styles.container}>
