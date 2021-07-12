@@ -16,8 +16,8 @@ import axios from 'axios'
 
 class Login extends Component {
   state = {
-    password: '',
-    email: '',
+    password: 'contraseña',
+    email: 'conductor@gmail.com',
     disableButton: false
   }
   render() {
@@ -66,10 +66,12 @@ class Login extends Component {
             <TextInput
               style={styles.input}
               onChangeText={(e) => this.setState({email: e})}
+              value={this.state.email}
             />
             <Text style={styles.mail} >Contraseña</Text>
             <TextInput
               style={styles.input}
+              value={this.state.password}
               onChangeText={(e) => {
                 this.setState({password: e})              
               }}
@@ -124,17 +126,11 @@ const styles = StyleSheet.create({
   forgot: {
     margin: 25
   },
-  logo: {
-
-  },
   forgotText: {
     color: 'rgba(131, 0, 0, 1)'
   },
   registerText: {
     color: 'rgba(131, 0, 0, 1)'
-  },
-  register: {
-
   },
   textTitle: {
     fontSize: 36,
@@ -148,9 +144,9 @@ const styles = StyleSheet.create({
     marginTop: "15%"
   },
   logText: {
-    color: 'rgba(255, 255, 255, 1)',
-    fontSize: 20,
-    fontFamily: 'Roboto-Bold'
+      color: 'rgba(255, 255, 255, 1)',
+      fontSize: 20,
+      fontFamily: 'Roboto-Bold'
   },
   textLogIn: {
     marginTop: 20,

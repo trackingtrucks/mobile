@@ -11,6 +11,7 @@ import ObdReader from './ObdReader'
 import Settings from './multimedia/settings.svg'
 import Arrow from './multimedia/backArrow.svg'
 import Logo from './multimedia/logo.svg'
+import Asignacion from './asignacion';
 
 
 class Home extends Component {
@@ -19,11 +20,13 @@ class Home extends Component {
         const pressBackHandler = () => {
             navigation.goBack()
         }
-
+        const pressSettings = () => {
+            navigation.navigate('Settings')
+        }
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={pressSettings}>
                         <Settings style={styles.settings} />
                     </TouchableOpacity>
                     <Logo width="65" height="65" style={styles.logo} />
@@ -32,6 +35,7 @@ class Home extends Component {
                         <Text>{global.perfil.rol}</Text>
                     </View>
                 </View>
+                <Asignacion/>
                 <ObdReader />
             </View>
         )
@@ -47,14 +51,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent:"space-between"
     },
-    nombre:{
-    },
-    settings:{
-
-    },
-    logo:{
-        
-    }
 });
 
 export default Home
