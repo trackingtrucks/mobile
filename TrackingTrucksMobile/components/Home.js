@@ -11,7 +11,6 @@ import ObdReader from './ObdReader'
 import Settings from './multimedia/settings.svg'
 import Arrow from './multimedia/backArrow.svg'
 import Logo from './multimedia/logo.svg'
-import Asignacion from './asignacion';
 
 
 class Home extends Component {
@@ -35,7 +34,6 @@ class Home extends Component {
                         <Text>{global.perfil.rol}</Text>
                     </View>
                 </View>
-                <Asignacion/>
                 <ObdReader />
             </View>
         )
