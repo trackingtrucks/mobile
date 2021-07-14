@@ -7,6 +7,8 @@ import MemoryStore from './memoryStore'
 import SpeedLogo from './multimedia/speed.svg'
 import RpmLogo from './multimedia/rpm.svg'
 import Info from './info';
+import axios from 'axios'
+import Config from './Config'
 
 const obd2 = require('react-native-obd2');
 const cache = new Cache({
@@ -106,12 +108,9 @@ export default class ObdReader extends Component {
 
   dataSend = async () => {
     const allCache = cache.getAll()
+    console.log(allCache);
     try {
       const res = await axios.post(Config.API_URL + '/data', {
-        headers: {
-          "Content-type": "application/json",
-          "x-access-token": global.accessToken
-        },
         data: {
           "fuelLevel": allCache.fuelLevel,
           "RPM": allCache.engineRpm,
@@ -119,15 +118,20 @@ export default class ObdReader extends Component {
           "coolantTemperature": allCache.engineCoolant,
           "pendingTroubleCodes": allCache.troubleCodes,
           "kilometrosRecorridos": this.state.kmsDone
+          }
+        }, {
+        headers: {
+          'Content-Type': 'application/json',
+          "x-access-token": global.accessToken,
         }
       })
       console.log(res.data)
     } catch (error) {
       this.setState({ disableButton: false })
-      console.log(error || error.message)
+      console.log(error.response.data.message || error.message)
       Alert.alert(
         "Error",
-        error,
+        error.response.data.message,
         [
           { text: 'OK', onPress: () => { } },
         ]
@@ -171,14 +175,16 @@ export default class ObdReader extends Component {
       });
       await cache.set("troubleCodes", this.state.pendingTroubleCodes);
     }
-    setTimeout(async () => {
-      this.dataSend();
-    }, 3000);
-
   }
 
   scan = async () => {
     this.startLiveData();
+  }
+
+  test = async () => {
+    setTimeout(() => {
+      this.dataSend();
+    }, 3000);
   }
 
   render() {
@@ -230,12 +236,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#DDDDDD",
     padding: 10,
   },
-  buttonInfo:{
+  buttonInfo: {
     alignItems: "center",
     backgroundColor: "#DDDDDD",
     padding: 10,
   },
-  buttonTurnos:{
+  buttonTurnos: {
     alignItems: "center",
     backgroundColor: "#DDDDDD",
     padding: 10,
@@ -270,9 +276,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent:'space-around' ,
+    justifyContent: 'space-around',
     marginBottom: 15,
-    marginTop:20,
+    marginTop: 20,
   },
   cardText: {
     textAlign: 'center',
