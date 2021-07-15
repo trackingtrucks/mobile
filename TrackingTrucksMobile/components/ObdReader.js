@@ -1,8 +1,7 @@
 'use strict'
 
 import React, { Component, useState } from 'react'
-import { View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity, Alert, AsyncStorage } from 'react-native'
-import { Cache } from 'react-native-cache';
+import { View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity, Alert, AsyncStorage, LogBox, TouchableHighlight } from 'react-native'
 import MemoryStore from './memoryStore'
 import SpeedLogo from './multimedia/speed.svg'
 import RpmLogo from './multimedia/rpm.svg'
@@ -11,13 +10,7 @@ import axios from 'axios'
 import Config from './Config'
 
 const obd2 = require('react-native-obd2');
-const cache = new Cache({
-  namespace: "ObdReader",
-  policy: {
-    maxEntries: 50000
-  },
-  backend: MemoryStore
-});
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 export default class ObdReader extends Component {
   constructor(props) {
@@ -36,6 +29,7 @@ export default class ObdReader extends Component {
       fuelLevel: '0%',
       engineCoolantTemperature: '0°C',
       pendingTroubleCodes: [],
+      knownTroubleCodes: [],
       kmsDone: '0km',
       prueba: "",
 
@@ -47,18 +41,18 @@ export default class ObdReader extends Component {
   obdStatus = (data) => {
     this.setState({ obdStatus: data.status });
   }
+
   componentDidMount() {
     this.btStatusListener = DeviceEventEmitter.addListener('obd2BluetoothStatus', this.btStatus);
     this.obdStatusListener = DeviceEventEmitter.addListener('obd2Status', this.obdStatus);
     this.obdLiveDataListener = DeviceEventEmitter.addListener('obd2LiveData', this.obdLiveData);
     this.onReady();
   }
-  
+
   componentWillUnmount() {
     obd2.stopLiveData();
     this.btStatusListener.remove();
     this.obdStatusListener.remove();
-    cache.clearAll()
   }
 
   onReady() {
@@ -110,7 +104,9 @@ export default class ObdReader extends Component {
 
   dataSend = async () => {
     try {
-      if (this.state.pendingTroubleCodes ==  null) {
+      this.state.pendingTroubleCodes.sort()
+      this.state.knownTroubleCodes.sort()
+      if (this.state.pendingTroubleCodes == null) {
         const res = await axios.post(Config.API_URL + '/data', {
           data: {
             "fuelLevel": await AsyncStorage.getItem('fuel'),
@@ -118,7 +114,7 @@ export default class ObdReader extends Component {
             "speed": await AsyncStorage.getItem('speed'),
             "coolantTemperature": await AsyncStorage.getItem('coolant'),
             "kilometrosRecorridos": this.state.kmsDone
-            
+
           }
         }, {
           headers: {
@@ -126,7 +122,7 @@ export default class ObdReader extends Component {
             "x-access-token": global.accessToken,
           }
         })
-      } else {
+      } else if (JSON.stringify(this.state.pendingTroubleCodes) === JSON.stringify(this.state.knownTroubleCodes)) {
         const res = await axios.post(Config.API_URL + '/data', {
           data: {
             "fuelLevel": await AsyncStorage.getItem('fuel'),
@@ -134,7 +130,7 @@ export default class ObdReader extends Component {
             "speed": await AsyncStorage.getItem('speed'),
             "coolantTemperature": await AsyncStorage.getItem('coolant'),
             "kilometrosRecorridos": this.state.kmsDone,
-            "pendingTroubleCodes": await AsyncStorage.getItem('trouble')
+            "pendingTroubleCodes": this.state.pendingTroubleCodes
           }
         }, {
           headers: {
@@ -145,6 +141,10 @@ export default class ObdReader extends Component {
       }
       console.log(res.data)
       await AsyncStorage.clear()
+      this.setState({
+        pendingTroubleCodes: [],
+        knownTroubleCodes: this.state.pendingTroubleCodes
+      })
     } catch (error) {
       this.setState({ disableButton: false })
       console.log(error.response.data.message || error.message)
@@ -164,7 +164,6 @@ export default class ObdReader extends Component {
       await AsyncStorage.setItem('rpm', JSON.stringify({ [new Date()]: this.state.rpm }))
       await AsyncStorage.setItem('speed', JSON.stringify({ [new Date()]: this.state.speed }))
       await AsyncStorage.setItem('coolant', JSON.stringify({ [new Date()]: this.state.engineCoolantTemperature }))
-      await AsyncStorage.setItem('trouble', JSON.stringify({ [new Date()]: this.state.pendingTroubleCodes }))
     }
     let copyData = JSON.parse(JSON.stringify(this.state.obd2Data));
     copyData[data.cmdID] = data;
@@ -199,13 +198,12 @@ export default class ObdReader extends Component {
       this.setState({
         pendingTroubleCodes: data.cmdResult,
       });
-      await AsyncStorage.mergeItem('trouble', JSON.stringify({ [new Date()]: this.state.pendingTroubleCodes }))
     }
     if (this.state.pendingTroubleCodes == null) {
       setTimeout(() => {
         this.dataSend()
       }, 300000);
-    } else{
+    } else {
       this.dataSend()
     }
   }
@@ -215,22 +213,6 @@ export default class ObdReader extends Component {
   }
 
   test = async () => {
-    /*setTimeout(() => {
-      this.dataSend()
-    }, 3000);
-    await AsyncStorage.clear()
-    await AsyncStorage.mergeItem('speed', JSON.stringify({[new Date()] :this.state.speed}))
-    await AsyncStorage.mergeItem('rpm', JSON.stringify({[new Date()] :this.state.rpm}))
-    console.log(await AsyncStorage.getItem('speed'));
-    await AsyncStorage.mergeItem('fuel', JSON.stringify({[new Date()] :this.state.fuelLevel}))
-    await AsyncStorage.clear()
-    if (await AsyncStorage.getItem('fuel') == null ) {
-      await AsyncStorage.setItem('fuel', JSON.stringify({[new Date()] : this.state.fuelLevel}))
-      await AsyncStorage.setItem('rpm', JSON.stringify({[new Date()] : this.state.rpm}))
-      await AsyncStorage.setItem('speed', JSON.stringify({[new Date()] : this.state.speed}))
-      await AsyncStorage.setItem('coolant', JSON.stringify({[new Date()] : this.state.engineCoolantTemperature}))
-    }
-    console.log(await AsyncStorage.getAllKeys())*/
   }
 
   render() {
@@ -249,16 +231,16 @@ export default class ObdReader extends Component {
           <Text>Cache Test</Text>
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.buttonInfo}
-          >
-            <Text>Información</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonTurnos}
-          >
-            <Text>turnos</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonInfo}>
+            <TouchableOpacity>
+              <Text style={{ textAlign: "center", color: "white" }}>Información</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonTurnos}>
+            <TouchableOpacity>
+              <Text style={{ textAlign: "center", color: "#830000" }}>Turnos</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <Info
           rpm={this.state.rpm}
@@ -281,16 +263,46 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#DDDDDD",
     padding: 10,
+    textAlign: "center",
+    display: "flex"
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop:15,
+    marginBottom:15
   },
   buttonInfo: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    backgroundColor: "#830000",
+    marginLeft:20,
+    flex: 1,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderTopColor: "#830000",
+    borderRightColor: "transparent",
+    borderBottomColor: "#830000",
+    borderLeftColor:"#830000",
+    borderWidth:1,
+    paddingBottom: 15,
+    paddingTop:15,
+    borderRightWidth:0
   },
   buttonTurnos: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    backgroundColor: "white",
+    borderTopColor: "#A6A6A6",
+    borderRightColor: "#A6A6A6",
+    borderBottomColor: "#A6A6A6",
+    borderLeftColor:"transparent",
+    borderWidth:1,
+    paddingBottom: 15,
+    paddingTop:15,
+    fontSize:18,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+    marginRight:20,
+    flex: 1,
+    borderLeftWidth:0
   },
   card: {
     backgroundColor: "rgba(227, 227, 227, 1)",
@@ -319,12 +331,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 15
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 15,
-    marginTop: 20,
   },
   cardText: {
     textAlign: 'center',

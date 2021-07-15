@@ -17,16 +17,17 @@ class Settings extends Component {
         const pressLogOutHandler = async () => {
             console.log(global.refreshToken)
             try {
-                await axios.delete(Config.API_URL, '/auth/token', {
+                await axios.delete(Config.API_URL + '/auth/token', {
                     headers: {
                         "x-refresh-token": global.refreshToken,
                         "x-access-token": global.accessToken
                     }
                 })
+                
                 navigation.navigate('Landing')
             }
             catch (error) {
-                console.error(error.response.data.message)
+                console.error(error?.response?.data?.message || error.message)
             }
         }
         return (
