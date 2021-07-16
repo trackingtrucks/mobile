@@ -16,6 +16,7 @@
     "react": "17.0.1",
     "react-native": "0.64.2",
     "react-native-cache": "^2.0.1",
+    "react-native-fs-store": "^0.1.7",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-obd2": "0.0.2",
     "react-native-reanimated": "^2.2.0",

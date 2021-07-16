@@ -3,7 +3,9 @@ import { createAppContainer } from "react-navigation";
 import Landing from '../components/landing'
 import logIn from '../components/logIn'
 import Settings from "../components/settings";
-import Home from '../components/Home'
+import Home from '../components/Home';
+
+import HomeHeader from "../components/homeHeader";
 import { CardStyleInterpolators } from "react-navigation-stack";
 import { Dimensions } from 'react-native'
 
@@ -22,17 +24,23 @@ const screens = {
     },
     Home: {
         screen: Home,
-        navigationOptions:{
+        navigationOptions: {
             headerShown: false
         }
     },
     Settings: {
         screen: Settings,
-        navigationOptions:{
+        navigationOptions: {
             headerShown: false
         }
-    }
-    
+    }, 
+    HomeHeader: {
+        screen: HomeHeader,
+        navigationOptions: {
+            headerShown: false
+        }
+    },
+
 }
 
 const HomeStack = createStackNavigator(screens);

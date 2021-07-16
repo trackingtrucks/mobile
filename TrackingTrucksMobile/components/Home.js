@@ -11,30 +11,39 @@ import ObdReader from './ObdReader'
 import Settings from './multimedia/settings.svg'
 import Arrow from './multimedia/backArrow.svg'
 import Logo from './multimedia/logo.svg'
-
+import HomeHeader from './homeHeader';
+import Turno from './turno'
 
 class Home extends Component {
+
+    constructor(props) {
+        super()
+        this.state = {
+            turnoShown:false,
+            infoShown: true
+        }
+    }
+
     render() {
-        const { navigation } = this.props
-        const pressBackHandler = () => {
-            navigation.goBack()
+        const renderTurno = () => {
+            this.setState({
+                infoShown:false,
+                turnoShown: true
+            })
         }
-        const pressSettings = () => {
-            navigation.navigate('Settings')
+
+        const renderInfo = () => {
+            this.setState({
+                infoShown:true,
+                turnoShown: false
+            })
         }
+
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={pressSettings}>
-                        <Settings style={styles.settings} />
-                    </TouchableOpacity>
-                    <Logo width="65" height="65" style={styles.logo} />
-                    <View style={styles.nombre}>
-                        <Text>{global.perfil.nombre}</Text>
-                        <Text>{global.perfil.rol}</Text>
-                    </View>
-                </View>
-                <ObdReader />
+                <HomeHeader renderInfo={renderInfo} renderTurno={renderTurno} navigation={this.props} />
+                {this.state.turnoShown ?  <Turno /> : null}
+                {this.state.infoShown ?  <ObdReader /> : null}
             </View>
         )
     }
@@ -47,7 +56,7 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: "row",
-        justifyContent:"space-between"
+        justifyContent: "space-between"
     },
 });
 

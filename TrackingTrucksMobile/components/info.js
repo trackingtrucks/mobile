@@ -9,7 +9,7 @@ import RpmLogo from './multimedia/rpm.svg'
 export default class Info extends Component {
     render() {
         return (
-            <View style={{ flex: 1, backgroundColor: '#fff' }}>
+            <View >
                 <View style={styles.container}>
                     <View elevation={5} style={styles.card}>
                         <View style={{ flexDirection: "row", justifyContent: 'center' }}>
@@ -55,12 +55,12 @@ export default class Info extends Component {
                         </Text>
                     </View>
                 </View>
-                <View style={styles.errCard}>
+                {this.props.errShown ? <View style={styles.errCard}>
                     <Text style={styles.errCardText}>
                         Código de problemas pendientes
                     </Text>
                     <Text style={styles.errCardText} >{" " + this.props.trouble}</Text>
-                </View>
+                </View>: null}
             </View>
         )
     }
@@ -74,20 +74,24 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: "rgba(227, 227, 227, 1)",
-        width: "45%",
+        width: "43%",
         height: 142,
         borderRadius: 9,
         justifyContent: 'center',
         shadowColor: "#830000",
         shadowOpacity: 0,
+        margin:10
     },
     errCard: {
         backgroundColor: "#830000",
-        height: 142,
+        height: 100,
         borderRadius: 9,
         justifyContent: 'center',
         shadowColor: "#830000",
         shadowOpacity: 0,
+        marginTop:25,
+        marginLeft:15,
+        marginRight:15
     },
     errCardText: {
         color: "#FFFFFF",
@@ -97,8 +101,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginBottom: 15
+        justifyContent: 'center',
     },
     cardText: {
         textAlign: 'center',
