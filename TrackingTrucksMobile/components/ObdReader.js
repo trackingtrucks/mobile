@@ -107,7 +107,7 @@ export default class ObdReader extends Component {
     try {
       this.state.pendingTroubleCodes.sort()
       this.state.knownTroubleCodes.sort()
-      if (this.state.pendingTroubleCodes == null) {
+      if (this.state.pendingTroubleCodes.length == 0) {
         const res = await axios.post(Config.API_URL + '/data', {
           data: {
             "fuelLevel": await AsyncStorage.getItem('fuel'),
@@ -201,7 +201,7 @@ export default class ObdReader extends Component {
         pendingTroubleCodes: data.cmdResult,
       });
     }
-    if (this.state.pendingTroubleCodes == null) {
+    if (this.state.pendingTroubleCodes.length == 0) {
       setInterval(() => {
         this.dataSend()
       }, 300000);
@@ -215,6 +215,11 @@ export default class ObdReader extends Component {
   }
 
   test = async () => {
+    if (this.state.pendingTroubleCodes.length == 0) {
+      console.log("hola");
+    }else{
+      console.log("hola2");
+    }
   }
 
   render() {
@@ -226,12 +231,12 @@ export default class ObdReader extends Component {
         >
           <Text>Scanear</Text>
         </TouchableOpacity>
-        {/*<TouchableOpacity
+        <TouchableOpacity
           style={styles.button}
           onPress={() => this.test()}
         >
           <Text>Cache Test</Text>
-        </TouchableOpacity>*/}
+        </TouchableOpacity>
         <Info
           rpm={this.state.rpm}
           speed={this.state.speed}

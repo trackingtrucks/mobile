@@ -20,11 +20,13 @@ export default class HomeHeader extends Component {
             infoTextColor: "white",
             infoColor: "#830000",
             turnoTextColor: "#830000",
-            turnoColor: "white"
+            turnoColor: "white",
+            borderInfoColor: "#830000",
+            borderTurnoColor: "#A6A6A6",
         }
     }
     render() {
-        
+
         const { navigation } = this.props.navigation
         const pressBackHandler = () => {
             navigation.goBack()
@@ -37,10 +39,12 @@ export default class HomeHeader extends Component {
         const pressInfoHandler = () => {
             this.props.renderInfo()
             this.setState({
-            infoTextColor: "white",
-            infoColor: "#830000",
-            turnoTextColor: "#830000",
-            turnoColor: "white"
+                infoTextColor: "white",
+                infoColor: "#830000",
+                turnoTextColor: "#830000",
+                turnoColor: "white",
+                borderInfoColor: "#830000",
+                borderTurnoColor: "#A6A6A6",
             })
         }
 
@@ -50,7 +54,9 @@ export default class HomeHeader extends Component {
                 infoTextColor: "#830000",
                 infoColor: "white",
                 turnoTextColor: "white",
-                turnoColor: "#830000"
+                turnoColor: "#830000",
+                borderInfoColor: "#A6A6A6",
+                borderTurnoColor: "#830000",
             })
         }
 
@@ -68,13 +74,29 @@ export default class HomeHeader extends Component {
                 </View>
                 <View style={styles.buttonContainer}>
                     <View style={styles.buttonInfoContainer} >
-                        <TouchableOpacity style={[styles.buttonInfo, {backgroundColor: this.state.infoColor}]}>
-                            <Text style={{ textAlign: "center", color: this.state.infoTextColor, fontFamily: "Roboto-Medium", fontSize: 18 }} onPress={pressInfoHandler}>Información </Text>
+                        <TouchableOpacity onPress={pressInfoHandler} style={[styles.buttonInfo, {
+                            backgroundColor: this.state.infoColor,
+                            borderTopColor: this.state.borderInfoColor,
+                            borderRightColor: "transparent",
+                            borderBottomColor: this.state.borderInfoColor,
+                            borderLeftColor: this.state.borderInfoColor,
+                        }]}>
+                            <Text style={{
+                                textAlign: "center", color: this.state.infoTextColor, fontFamily: "Roboto-Medium", fontSize: 18
+                            }}>Información </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.buttonTurnosContainer}>
-                        <TouchableOpacity style={[styles.buttonTurnos, {backgroundColor:this.state.turnoColor}]}>
-                            <Text style={{ textAlign: "center", color: this.state.turnoTextColor, fontFamily: "Roboto-Medium", fontSize: 18 }} onPress={pressTurnoHandler}>Turnos</Text>
+                        <TouchableOpacity onPress={pressTurnoHandler} style={[styles.buttonTurnos, {
+                            backgroundColor: this.state.turnoColor,
+                            borderTopColor: this.state.borderTurnoColor,
+                            borderRightColor: this.state.borderTurnoColor,
+                            borderBottomColor: this.state.borderTurnoColor,
+                            borderLeftColor: "transparent",
+                        }]}>
+                            <Text style={{
+                                textAlign: "center", color: this.state.turnoTextColor, fontFamily: "Roboto-Medium", fontSize: 18
+                            }} >Turnos</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -98,11 +120,7 @@ const styles = StyleSheet.create({
         marginTop: 15,
         marginBottom: 15
     },
-    buttonInfo:{
-        borderTopColor: "#830000",
-        borderRightColor: "transparent",
-        borderBottomColor: "#830000",
-        borderLeftColor: "#830000",
+    buttonInfo: {
         borderWidth: 1,
         paddingBottom: 15,
         paddingTop: 15,
@@ -116,7 +134,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 10,
         borderBottomLeftRadius: 10,
     },
-    buttonTurnosContainer:{
+    buttonTurnosContainer: {
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         marginRight: 20,
@@ -124,15 +142,11 @@ const styles = StyleSheet.create({
     },
     buttonTurnos: {
         backgroundColor: "white",
-        borderTopColor: "#A6A6A6",
-        borderRightColor: "#A6A6A6",
-        borderBottomColor: "#A6A6A6",
-        borderLeftColor: "transparent",
         borderWidth: 1,
         paddingBottom: 15,
         paddingTop: 15,
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
-        
+
     },
 });
