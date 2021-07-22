@@ -13,7 +13,6 @@ class Landing extends Component {
   render() {
     const pressHandler = () => {
       this.props.navigation.navigate('logIn')
-      console.log(global.refreshToken)
     }
     return (
       <View style={styles.container}>
