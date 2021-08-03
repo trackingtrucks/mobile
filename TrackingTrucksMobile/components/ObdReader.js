@@ -26,9 +26,9 @@ export default class ObdReader extends Component {
       selectedBTDeviceIndex: 0,
       btDeviceListForUI: [],
       rpm: '0RPM',
-      speed: '0km/h',
+      speed: '0km\/h',
       fuelLevel: '0%',
-      engineCoolantTemperature: '0°C',
+      engineCoolantTemperature: '0C',
       pendingTroubleCodes: [],
       knownTroubleCodes: [],
       kmsDone: '0km',
@@ -109,10 +109,10 @@ export default class ObdReader extends Component {
       this.state.knownTroubleCodes.sort()
       if (this.state.pendingTroubleCodes.length == 0) {
         const res = await axios.post(Config.API_URL + '/data', {
-          "fuelLevel": await AsyncStorage.getItem('fuel'),
-          "RPM": await AsyncStorage.getItem('rpm'),
-          "speed": await AsyncStorage.getItem('speed'),
-          "coolantTemperature": await AsyncStorage.getItem('coolant'),
+          "fuelLevel": JSON.parse(parseInt(await AsyncStorage.getItem('fuel')).replace(/'/g,`"`)),
+          "RPM": JSON.parse(parseInt(await AsyncStorage.getItem('rpm')).replace(/'/g,`"`)),
+          "speed": JSON.parse(parseInt(await AsyncStorage.getItem('speed')).replace(/'/g,`"`)),
+          "coolantTemperature": JSON.parse(parseInt(await AsyncStorage.getItem('coolant')).replace(/'/g,`"`)),
           "kilometrosRecorridos": this.state.kmsDone
         }, {
           headers: {
@@ -125,10 +125,10 @@ export default class ObdReader extends Component {
           errShown: true
         })
         const res = await axios.post(Config.API_URL + '/data', {
-          "fuelLevel": await AsyncStorage.getItem('fuel'),
-          "RPM": await AsyncStorage.getItem('rpm'),
-          "speed": await AsyncStorage.getItem('speed'),
-          "coolantTemperature": await AsyncStorage.getItem('coolant'),
+          "fuelLevel": JSON.parse(parseInt(await AsyncStorage.getItem('fuel')).replace(/'/g,`"`)),
+          "RPM": JSON.parse(parseInt(await AsyncStorage.getItem('rpm')).replace(/'/g,`"`)),
+          "speed": JSON.parse(parseInt(await AsyncStorage.getItem('speed')).replace(/'/g,`"`)),
+          "coolantTemperature": JSON.parse(parseInt(await AsyncStorage.getItem('coolant')).replace(/'/g,`"`)),
           "kilometrosRecorridos": this.state.kmsDone,
           "pendingTroubleCodes": this.state.pendingTroubleCodes
         }, {
@@ -169,30 +169,32 @@ export default class ObdReader extends Component {
     this.setState({
       obd2Data: copyData,
     });
-    if (data.cmdID === 'ENGINE_RPM') {
-      this.setState({
-        rpm: data.cmdResult
-      });
-      await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
-    }
-    if (data.cmdID === 'SPEED') {
-      this.setState({
-        speed: data.cmdResult,
-      });
-      await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
-    }
-    if (data.cmdID === 'FUEL_LEVEL') {
-      this.setState({
-        fuelLevel: data.cmdResult,
-      });
-      await AsyncStorage.mergeItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
-    }
-    if (data.cmdID === 'ENGINE_COOLANT_TEMP') {
-      this.setState({
-        engineCoolantTemperature: data.cmdResult,
-      });
-      await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
-    }
+    if(data.cmdID != null){
+      if (data.cmdID === 'ENGINE_RPM') {
+        this.setState({
+          rpm: data.cmdResult
+        });
+        await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
+      }
+      if (data.cmdID === 'SPEED') {
+        this.setState({
+          speed: data.cmdResult,
+        });
+        await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
+      }
+      if (data.cmdID === 'FUEL_LEVEL') {
+        this.setState({
+          fuelLevel: data.cmdResult,
+        });
+        await AsyncStorage.mergeItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
+      }
+      if (data.cmdID === 'ENGINE_COOLANT_TEMP') {
+        this.setState({
+          engineCoolantTemperature: data.cmdResult,
+        });
+        await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
+      }
+    } 
     if (data.cmdID === 'PENDING_TROUBLE_CODES') {
       this.setState({
         pendingTroubleCodes: data.cmdResult,
@@ -212,11 +214,6 @@ export default class ObdReader extends Component {
   }
 
   test = async () => {
-    if (this.state.pendingTroubleCodes.length == 0) {
-      console.log("hola");
-    }else{
-      console.log("hola2");
-    }
   }
 
   render() {
