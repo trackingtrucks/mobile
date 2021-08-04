@@ -120,6 +120,9 @@ export default class ObdReader extends Component {
             "x-access-token": global.accessToken,
           }
         })
+        this.setState({
+          errShown: false
+        })
       } else if (JSON.stringify(this.state.pendingTroubleCodes) === JSON.stringify(this.state.knownTroubleCodes)) {
         this.setState({
           errShown: true
@@ -218,19 +221,7 @@ export default class ObdReader extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => this.scan()}
-        >
-          <Text>Scanear</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => this.test()}
-        >
-          <Text>Cache Test</Text>
-        </TouchableOpacity>
+      <View>
         <Info
           rpm={this.state.rpm}
           speed={this.state.speed}

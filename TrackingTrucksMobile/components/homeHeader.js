@@ -63,13 +63,16 @@ export default class HomeHeader extends Component {
         return (
             <View>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={pressSettings}>
-                        <Settings style={styles.settings} />
-                    </TouchableOpacity>
-                    <Logo width="65" height="65" style={styles.logo} />
+                    <View style={styles.settings}>
+                        <TouchableOpacity onPress={pressSettings}>
+                            <Settings />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.logo}>
+                        <Logo width="65" height="65" />
+                    </View>
                     <View style={styles.nombre}>
-                        <Text>{global.perfil.nombre}</Text>
-                        <Text>{global.perfil.rol}</Text>
+                        <Text style={{textAlign:"center"}} >{global.perfil.nombre}{'\n'}{global.perfil.rol}</Text>
                     </View>
                 </View>
                 <View style={styles.buttonContainer}>
@@ -111,14 +114,27 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: "row",
-        justifyContent: "space-between"
+        alignItems:"center",
+    },
+    settings:{
+        justifyContent:'flex-start',
+        flex:1,
+        marginLeft:20
+    },
+    nombre:{
+        flex:1,
+        alignItems:"flex-end",
+        marginRight:20,
+    },
+    logo: {
+        justifyContent:'center',
     },
     buttonContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 15,
-        marginBottom: 15
+        marginTop: 80,
+        marginBottom: 60
     },
     buttonInfo: {
         borderWidth: 1,

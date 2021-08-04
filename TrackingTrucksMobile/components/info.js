@@ -5,6 +5,7 @@ import SpeedLogo from './multimedia/speed.svg'
 import RpmLogo from './multimedia/rpm.svg'
 import FuelLogo from './multimedia/fuel.svg'
 import CoolantLogo from './multimedia/coolant.svg'
+import ErrorLogo from './multimedia/error.svg'
 
 export default class Info extends Component {
     render() {
@@ -12,7 +13,7 @@ export default class Info extends Component {
             <View >
                 <View style={styles.container}>
                     <View elevation={5} style={styles.card}>
-                        <View style={{ flexDirection: "row", justifyContent: 'center', alignItems:"center" }}>
+                        <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: "center" }}>
                             <Text style={styles.cardText}>
                                 RPM
                             </Text>
@@ -23,7 +24,7 @@ export default class Info extends Component {
                         </Text>
                     </View>
                     <View elevation={5} style={styles.card}>
-                        <View style={{ flexDirection: "row", justifyContent: 'center', alignItems:"center" }}>
+                        <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: "center" }}>
                             <Text style={styles.cardText}>
                                 Velocidad
                             </Text>
@@ -36,22 +37,22 @@ export default class Info extends Component {
                 </View>
                 <View style={styles.container}>
                     <View elevation={5} style={styles.card}>
-                        <View style={{ flexDirection: "row", justifyContent: 'center', alignItems:"center" }}>
+                        <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: "center" }}>
                             <Text style={styles.cardText}>
                                 Nivel de nafta
                             </Text>
-                            <FuelLogo/>
+                            <FuelLogo />
                         </View>
                         <Text style={styles.cardText2}>
                             {" " + this.props.fuelLevel}
                         </Text>
                     </View>
                     <View elevation={5} style={styles.card}>
-                        <View style={{ flexDirection: "row", justifyContent:"center"}}>
+                        <View style={{ flexDirection: "row", justifyContent: "center" }}>
                             <Text style={styles.cardCoolantText}>
                                 Temperatura líquido refrigerante
                             </Text>
-                            <CoolantLogo style={{marginLeft:-8}} />
+                            <CoolantLogo style={{ marginLeft: -8 }} />
                         </View>
                         <Text style={styles.cardText2}>
                             {" " + this.props.coolant}
@@ -59,9 +60,14 @@ export default class Info extends Component {
                     </View>
                 </View>
                 {this.props.errShown ? <View style={styles.errCard}>
-                    <Text style={styles.errCardText}>
-                        Código de problemas pendientes
-                    </Text>
+                    <View style={styles.errorTitle} >
+                        <View style={{flex:1}}>
+                            <ErrorLogo />
+                        </View>
+                        <Text style={styles.errCardText}>
+                            Código de problemas pendientes
+                        </Text>
+                    </View>
                     <Text style={styles.errCardText} >{" " + this.props.trouble}</Text>
                 </View> : null}
             </View>
@@ -89,18 +95,21 @@ const styles = StyleSheet.create({
         backgroundColor: "#830000",
         height: 100,
         borderRadius: 9,
-        justifyContent: 'center',
         shadowColor: "#830000",
         shadowOpacity: 0,
         marginTop: 25,
         marginLeft: 15,
-        marginRight: 15
+        marginRight: 15,
+    },
+    errorTitle: {
+        flexDirection: "row",
+        alignItems: "center",
     },
     errCardText: {
         color: "#FFFFFF",
         fontFamily: "Roboto-Regular",
         fontSize: 18,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     container: {
         flexDirection: 'row',
