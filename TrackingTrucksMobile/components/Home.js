@@ -8,9 +8,6 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import ObdReader from './ObdReader'
-import Settings from './multimedia/settings.svg'
-import Arrow from './multimedia/backArrow.svg'
-import Logo from './multimedia/logo.svg'
 import HomeHeader from './homeHeader';
 import Turno from './turno'
 
