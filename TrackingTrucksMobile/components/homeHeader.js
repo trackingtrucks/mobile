@@ -99,7 +99,7 @@ export default class HomeHeader extends Component {
                         }]}>
                             <Text style={{
                                 textAlign: "center", color: this.state.turnoTextColor, fontFamily: "Roboto-Medium", fontSize: 18
-                            }} >Turnos</Text>
+                            }} >Vehículos</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

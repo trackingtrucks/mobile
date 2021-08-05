@@ -29,7 +29,7 @@ export default class ObdReader extends Component {
       speed: '0km\/h',
       fuelLevel: '0%',
       engineCoolantTemperature: '0C',
-      pendingTroubleCodes: [],
+      pendingTroubleCodes: ["s"],
       knownTroubleCodes: [],
       kmsDone: '0km',
       prueba: "",
