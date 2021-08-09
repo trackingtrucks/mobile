@@ -29,11 +29,11 @@ export default class ObdReader extends Component {
       speed: '0km\/h',
       fuelLevel: '0%',
       engineCoolantTemperature: '0C',
-      pendingTroubleCodes: ["s"],
+      pendingTroubleCodes: ["00BE"],
       knownTroubleCodes: [],
       kmsDone: '0km',
       prueba: "",
-      errShown: false
+      errShown: true
     }
   }
   btStatus = (data) => {
@@ -54,6 +54,7 @@ export default class ObdReader extends Component {
     obd2.stopLiveData();
     this.btStatusListener.remove();
     this.obdStatusListener.remove();
+    this.dataSend()
   }
 
   onReady() {

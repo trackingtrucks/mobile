@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react'
-import { View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity, Modal } from 'react-native'
+import { View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native'
 import MemoryStore from './memoryStore'
 import SpeedLogo from './multimedia/speed.svg'
 import RpmLogo from './multimedia/rpm.svg'
@@ -15,6 +15,7 @@ export default class Info extends Component {
 
     state = {
         alertsShown: true,
+        visible: true
     };
 
     render() {
@@ -28,6 +29,12 @@ export default class Info extends Component {
                     alertsShown: true
                 })
             }
+        }
+        const closeModal = () => {
+            console.log("hola")
+            this.setState({
+                visible: false
+            })
         }
         return (
             <View >
@@ -106,7 +113,9 @@ export default class Info extends Component {
                     </TouchableOpacity>
                 }
                 {this.props.errShown ? <View>
-                    <MyModal>
+
+                    <MyModal visible={this.state.visible}>
+                    <TouchableOpacity onPress={closeModal} style={{ height: "100%", width: "100%" }} >
                         <View style={styles.errCard}>
                             <View style={styles.errorTitle} >
                                 <View style={{ flex: 1 }}>
@@ -114,12 +123,14 @@ export default class Info extends Component {
                                 </View>
                                 <Text style={styles.errCardText}>
                                     Código de problemas pendientes
-                                </Text>
+                                        </Text>
                             </View>
                             <Text style={styles.errCardText} >{" " + this.props.trouble}</Text>
                         </View>
+                        </TouchableOpacity>
                     </MyModal>
-                </View> : null}
+                </View> : null
+                }
             </View>
         )
     }
@@ -163,7 +174,6 @@ const styles = StyleSheet.create({
         color: "#830000",
         fontSize: 20,
         fontFamily: "Roboto-Medium",
-
     },
     button: {
         alignItems: "center",
@@ -201,6 +211,7 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto-Regular",
         fontSize: 18,
         textAlign: 'center',
+        marginRight: 15
     },
     container: {
         flexDirection: 'row',
