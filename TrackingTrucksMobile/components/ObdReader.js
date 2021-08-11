@@ -33,7 +33,7 @@ export default class ObdReader extends Component {
       knownTroubleCodes: [],
       kmsDone: '0km',
       prueba: "",
-      errShown: true
+      errShown: false
     }
   }
   btStatus = (data) => {

@@ -12,6 +12,8 @@ import Settings from './multimedia/settings.svg'
 import Arrow from './multimedia/backArrow.svg'
 import Logo from './multimedia/logo.svg'
 import Info from './info'
+import axios from 'axios';
+import Config from './Config';
 
 export default class HomeHeader extends Component {
     constructor(props) {
@@ -35,7 +37,19 @@ export default class HomeHeader extends Component {
         const pressSettings = () => {
             navigation.navigate('Settings')
         }
-
+        const getUserInfo = async () => {
+            try {
+                const data = await axios.get(Config.API_URL + "/user", {
+                    headers: {
+                        'x-access-token': global.at 
+                    }
+                });
+                global.patente = data.data.vehiculo.patente
+                console.log(data.data.vehiculo.patente);
+            } catch (error) {
+                console.log(error?.response?.data?.message || error.message);
+            }
+        }
         const pressInfoHandler = () => {
             this.props.renderInfo()
             this.setState({
@@ -72,7 +86,7 @@ export default class HomeHeader extends Component {
                         <Logo width="65" height="65" />
                     </View>
                     <View style={styles.nombre}>
-                        <Text style={{textAlign:"center"}} >{global.perfil.nombre}{'\n'}{global.perfil.rol}</Text>
+                        <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
                     </View>
                 </View>
                 <View style={styles.buttonContainer}>
@@ -99,7 +113,9 @@ export default class HomeHeader extends Component {
                         }]}>
                             <Text style={{
                                 textAlign: "center", color: this.state.turnoTextColor, fontFamily: "Roboto-Medium", fontSize: 18
-                            }} >Vehículos</Text>
+                            }} 
+                            onPress={getUserInfo}
+                            >Vehículos</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -114,20 +130,20 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: "row",
-        alignItems:"center",
+        alignItems: "center",
     },
-    settings:{
-        justifyContent:'flex-start',
-        flex:1,
-        marginLeft:20
+    settings: {
+        justifyContent: 'flex-start',
+        flex: 1,
+        marginLeft: 20
     },
-    nombre:{
-        flex:1,
-        alignItems:"flex-end",
-        marginRight:20,
+    nombre: {
+        flex: 1,
+        alignItems: "flex-end",
+        marginRight: 20,
     },
     logo: {
-        justifyContent:'center',
+        justifyContent: 'center',
     },
     buttonContainer: {
         flexDirection: 'row',

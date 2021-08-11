@@ -31,7 +31,6 @@ export default class Info extends Component {
             }
         }
         const closeModal = () => {
-            console.log("hola")
             this.setState({
                 visible: false
             })
@@ -106,16 +105,17 @@ export default class Info extends Component {
                             </View>
                         </View>
                         {this.props.errShown ? <View>
-                            <Text>{this.props.trouble}</Text>
+                            <Text style={styles.alertText}>{this.props.trouble}</Text>
                         </View> : <View >
-                            <Text style={{ textAlign: "center", marginTop: 10 }} >Por el momento no hay alertas</Text>
+                            <Text style={styles.alertText} >Por el momento no hay alertas</Text>
                         </View>}
                     </TouchableOpacity>
                 }
                 {this.props.errShown ? <View>
 
                     <MyModal visible={this.state.visible}>
-                    <TouchableOpacity onPress={closeModal} style={{ height: "100%", width: "100%" }} >
+                        <TouchableOpacity onPress={closeModal} style={{ height: "100%", width: "100%", position: "absolute" }} >
+                        </TouchableOpacity>
                         <View style={styles.errCard}>
                             <View style={styles.errorTitle} >
                                 <View style={{ flex: 1 }}>
@@ -123,11 +123,10 @@ export default class Info extends Component {
                                 </View>
                                 <Text style={styles.errCardText}>
                                     Código de problemas pendientes
-                                        </Text>
+                                </Text>
                             </View>
                             <Text style={styles.errCardText} >{" " + this.props.trouble}</Text>
                         </View>
-                        </TouchableOpacity>
                     </MyModal>
                 </View> : null
                 }
@@ -211,7 +210,13 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto-Regular",
         fontSize: 18,
         textAlign: 'center',
-        marginRight: 15
+        marginRight: 15,
+    },
+    alertText:{
+        fontFamily: "Roboto-Regular",
+        fontSize: 18,
+        textAlign: 'center',
+        marginRight: 15,
     },
     container: {
         flexDirection: 'row',

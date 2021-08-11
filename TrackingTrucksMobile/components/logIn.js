@@ -6,7 +6,8 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  Alert
+  Alert,
+  AsyncStorage
 } from 'react-native';
 import Config from './Config'
 import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
@@ -23,23 +24,21 @@ class Login extends Component {
   render() {
     const { navigation } = this.props
     const pressLogHandler = async () => {
-      this.setState({disableButton: true})              
+      this.setState({ disableButton: true })
       if (this.state.disableButton) return console.log("disabled!!");
       try {
         const res = await axios.post(Config.API_URL + '/auth/login', {
           password: this.state.password,
           email: this.state.email,
         })
-        global.accessToken = res.data.accessToken
-        global.refreshToken = res.data.refreshToken
-        global.ATExpires = res.data.ATExpiresIn
-        global.RTexpire = res.data.RTExpiresIn
-        global.perfil = res.data.perfil
-        console.log(res.data)
-        this.setState({disableButton: false})              
+        console.log(res.data.accessToken)
+        global.nombre = res.data.perfil.nombre
+        global.rol = res.data.perfil.rol
+        global.at = res.data.accessToken
+        this.setState({ disableButton: false })
         navigation.navigate('Home')
       } catch (error) {
-        this.setState({disableButton: false})              
+        this.setState({ disableButton: false })
         console.log(error.response.data.message || error.message)
         Alert.alert(
           "Error",
@@ -49,7 +48,7 @@ class Login extends Component {
           ]
         )
       }
-      
+
     }
 
     const pressBackHandler = () => {
@@ -65,7 +64,7 @@ class Login extends Component {
             <Text style={styles.mail} >Mail </Text>
             <TextInput
               style={styles.input}
-              onChangeText={(e) => this.setState({email: e})}
+              onChangeText={(e) => this.setState({ email: e })}
               value={this.state.email}
             />
             <Text style={styles.mail} >Contraseña</Text>
@@ -73,7 +72,7 @@ class Login extends Component {
               style={styles.input}
               value={this.state.password}
               onChangeText={(e) => {
-                this.setState({password: e})              
+                this.setState({ password: e })
               }}
             />
           </View>
@@ -144,9 +143,9 @@ const styles = StyleSheet.create({
     marginTop: "15%"
   },
   logText: {
-      color: 'rgba(255, 255, 255, 1)',
-      fontSize: 20,
-      fontFamily: 'Roboto-Bold'
+    color: 'rgba(255, 255, 255, 1)',
+    fontSize: 20,
+    fontFamily: 'Roboto-Bold'
   },
   textLogIn: {
     marginTop: 20,

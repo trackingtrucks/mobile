@@ -9,7 +9,8 @@ import HomeHeader from "../components/homeHeader";
 import { CardStyleInterpolators } from "react-navigation-stack";
 import { Dimensions } from 'react-native'
 
-const screens = {
+const homeScreens = {
+    
     Landing: {
         screen: Landing,
         navigationOptions: {
@@ -40,9 +41,23 @@ const screens = {
             headerShown: false
         }
     },
-
 }
 
-const HomeStack = createStackNavigator(screens);
+const notLoggedScreens = {
+    Landing: {
+        screen: Landing,
+        navigationOptions: {
+            headerShown: false,
+        }
+    },
+    logIn: {
+        screen: logIn,
+        navigationOptions: {
+            headerShown: false,
+        }
+    }
+}
 
-export default createAppContainer(HomeStack);
+const HomeStack = createAppContainer(createStackNavigator(homeScreens));
+const NotLoggedStack = createAppContainer(createStackNavigator(notLoggedScreens))
+export {NotLoggedStack, HomeStack}
