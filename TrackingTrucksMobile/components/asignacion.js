@@ -26,10 +26,11 @@ class Asignacion extends Component {
                         }, {
                         headers: {
                             'Content-Type': 'application/json',
-                            "x-access-token": global.accessToken,
+                            "x-access-token": global.at,
                         }
                     }
                     )
+                global.asignado = true
                 console.log("res:" + res.data.message)
             }
             catch (error) {
@@ -41,32 +42,6 @@ class Asignacion extends Component {
                     ]
                 )
                 console.error("error:" + error.response.data.message)
-            }
-        }
-        const desasignarHandler = async () => {
-            try {
-                const res = await axios
-                    .delete(Config.API_URL + '/vehiculo', {
-                        data: {
-                            patente: this.state.patente
-                        },
-                        headers: {
-                            'Content-Type': 'application/json',
-                            "x-access-token": global.accessToken,
-                        }
-                    }
-                    )
-                console.log("res:" + res.data)
-            }
-            catch (error) {
-                Alert.alert(
-                    "Error",
-                    error.response.data.message,
-                    [
-                        { text: 'OK', onPress: () => { } },
-                    ]
-                )
-                console.log("error:" + error.response.data.message)
             }
         }
         return (
@@ -82,8 +57,46 @@ class Asignacion extends Component {
                 <TouchableOpacity style={styles.asiButton}>
                     <Text style={styles.asiText} onPress={asignarHandler}>Asignarse</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.asiButton}>
-                    <Text style={styles.asiText} onPress={desasignarHandler}>Desasignarse</Text>
+            </View>
+        )
+    }
+}
+
+class Desasignacion extends Component {
+
+    render() {
+        const desasignarHandler = async () => {
+            try {
+                const res = await axios
+                    .delete(Config.API_URL + '/vehiculo', {
+                        data: {
+                            "kilometrajeActual": global.km
+                        },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "x-access-token": global.at,
+                        }
+                    }
+                    )
+                global.asignado = false
+                console.log("Desasignado pa")
+            }
+            catch (error) {
+                console.log("error: " +error.response.data.message)
+            }
+        }
+        return (
+            <View style={styles.container}>
+                <View style={styles.inputsContainer}>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(e) => {
+                            this.setState({ patente: e })
+                        }}
+                    />
+                </View>
+                <TouchableOpacity style={styles.asiButton} onPress={desasignarHandler}>
+                    <Text style={styles.asiText}>Desasignarme</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -92,13 +105,13 @@ class Asignacion extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         marginTop: 20,
     },
     asiText: {
-        color: 'rgba(255, 255, 255, 1)',
+        color: 'white',
         fontSize: 20,
-        fontFamily: 'Roboto-Bold'
+        fontFamily: 'Roboto-Medium',
+        textAlign: "center"
     },
     input: {
         height: 40,
@@ -115,4 +128,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Asignacion
+export { Desasignacion, Asignacion }

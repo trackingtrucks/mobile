@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import Config from './Config';
-import Asignacion from './asignacion';
 
 class Settings extends Component {
     render() {
@@ -35,7 +34,6 @@ class Settings extends Component {
                 <TouchableOpacity style={styles.logButton}>
                     <Text style={styles.logText} onPress={pressLogOutHandler}>Cerrar Sesión</Text>
                 </TouchableOpacity>
-                <Asignacion/>
             </View>
         )
     }

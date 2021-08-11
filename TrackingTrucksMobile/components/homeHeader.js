@@ -37,19 +37,7 @@ export default class HomeHeader extends Component {
         const pressSettings = () => {
             navigation.navigate('Settings')
         }
-        const getUserInfo = async () => {
-            try {
-                const data = await axios.get(Config.API_URL + "/user", {
-                    headers: {
-                        'x-access-token': global.at 
-                    }
-                });
-                global.patente = data.data.vehiculo.patente
-                console.log(data.data.vehiculo.patente);
-            } catch (error) {
-                console.log(error?.response?.data?.message || error.message);
-            }
-        }
+        
         const pressInfoHandler = () => {
             this.props.renderInfo()
             this.setState({
@@ -114,7 +102,6 @@ export default class HomeHeader extends Component {
                             <Text style={{
                                 textAlign: "center", color: this.state.turnoTextColor, fontFamily: "Roboto-Medium", fontSize: 18
                             }} 
-                            onPress={getUserInfo}
                             >Vehículos</Text>
                         </TouchableOpacity>
                     </View>
