@@ -7,17 +7,22 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
-    Alert
+    Alert,
+    ActivityIndicator
 } from 'react-native';
 import axios from 'axios';
 import Config from './Config';
 
 class Asignacion extends Component {
     state = {
-        patente: ''
+        patente: '',
+        isLoading: false
     }
     render() {
         const asignarHandler = async () => {
+            this.setState({
+                isLoading:true
+            })
             try {
                 const res = await axios
                     .put(Config.API_URL + '/vehiculo',
@@ -35,6 +40,10 @@ class Asignacion extends Component {
                 console.log("res:" + res.data.message)
             }
             catch (error) {
+                this.setState({
+                    isLoading:false
+                })
+
                 Alert.alert(
                     "Error",
                     error.response.data.message,
@@ -56,7 +65,8 @@ class Asignacion extends Component {
                     />
                 </View>
                 <TouchableOpacity style={styles.asiButton}>
-                    <Text style={styles.asiText} onPress={asignarHandler}>Asignarse</Text>
+                    {!this.state.isLoading && <Text style={styles.asiText} onPress={asignarHandler}>Asignarse</Text>}
+                    {this.state.isLoading && <ActivityIndicator color="#fff" />}
                 </TouchableOpacity>
             </View>
         )
@@ -65,26 +75,39 @@ class Asignacion extends Component {
 
 class Desasignacion extends Component {
 
+    state = {
+        isLoading: false,
+        km: global.km
+    }
+
     render() {
         const desasignarHandler = async () => {
+            this.setState({
+                isLoading: true
+            })
             try {
-                const res = await axios
-                    .delete(Config.API_URL + '/vehiculo', {
-                        data: {
-                            "kilometrajeActual": global.km
-                        },
-                        headers: {
-                            'Content-Type': 'application/json',
-                            "x-access-token": global.at,
+                if (this.state.km < global.km) {
+                    const res = await axios
+                        .delete(Config.API_URL + '/vehiculo', {
+                            data: {
+                                "kilometrajeActual": this.state.km
+                            },
+                            headers: {
+                                'Content-Type': 'application/json',
+                                "x-access-token": global.at,
+                            }
                         }
-                    }
-                    )
-                global.asignado = false
-                this.props.cambiarEstado()
-                console.log("Desasignado pa")
+                        )
+                    global.asignado = false
+                    this.props.cambiarEstado()
+                    console.log("Desasignado pa")
+                }
             }
             catch (error) {
-                console.log("error: " +error.response.data.message)
+                this.setState({
+                    isLoading: false
+                })
+                console.log("error: " + error.response.data.message)
             }
         }
         return (
@@ -93,12 +116,13 @@ class Desasignacion extends Component {
                     <TextInput
                         style={styles.input}
                         onChangeText={(e) => {
-                            this.setState({ patente: e })
+                            this.setState({ km: e })
                         }}
                     />
                 </View>
                 <TouchableOpacity style={styles.asiButton} onPress={desasignarHandler}>
-                    <Text style={styles.asiText}>Desasignarme</Text>
+                    {!this.state.isLoading && <Text style={styles.asiText}>Desasignarme</Text>}
+                    {this.state.isLoading && <ActivityIndicator color="#fff" size="small" />}
                 </TouchableOpacity>
             </View>
         )
