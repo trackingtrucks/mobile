@@ -25,11 +25,7 @@ class Login extends Component {
   }
   render() {
     const { navigation } = this.props
-    const pressLogHandler = async () => {
-      this.setState({ 
-        disableButton: true,
-        isLoading: true
-      })
+    const logIn = async () => {
       if (this.state.disableButton) return console.log("disabled!!");
       try {
         const res = await axios.post(Config.API_URL + '/auth/login', {
@@ -57,6 +53,14 @@ class Login extends Component {
         )
       }
 
+    }
+
+    const pressLogHandler = () => {
+      this.setState({ 
+        disableButton: true,
+        isLoading: true
+      })
+      logIn()
     }
 
     const pressBackHandler = () => {

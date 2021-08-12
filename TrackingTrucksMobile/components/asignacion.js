@@ -19,10 +19,7 @@ class Asignacion extends Component {
         isLoading: false
     }
     render() {
-        const asignarHandler = async () => {
-            this.setState({
-                isLoading:true
-            })
+        const asignar = async () => {
             try {
                 const res = await axios
                     .put(Config.API_URL + '/vehiculo',
@@ -53,6 +50,12 @@ class Asignacion extends Component {
                 )
                 console.error("error:" + error.response.data.message)
             }
+        }
+        const asignarHandler = () => {
+            this.setState({
+                isLoading:true
+            })
+            asignar()
         }
         return (
             <View style={styles.container}>
@@ -86,7 +89,7 @@ class Desasignacion extends Component {
                 isLoading: true
             })
             try {
-                if (this.state.km < global.km) {
+                if (this.state.km >= global.km) {
                     const res = await axios
                         .delete(Config.API_URL + '/vehiculo', {
                             data: {
@@ -101,6 +104,17 @@ class Desasignacion extends Component {
                     global.asignado = false
                     this.props.cambiarEstado()
                     console.log("Desasignado pa")
+                } else {
+                    Alert.alert(
+                        "Error",
+                        "Debe ingresar el kilometraje correcto",
+                        [
+                            { text: 'OK', onPress: () => { } },
+                        ]
+                    )
+                    this.setState({
+                        isLoading: false
+                    })
                 }
             }
             catch (error) {
