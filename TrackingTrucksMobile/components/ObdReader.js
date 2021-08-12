@@ -142,7 +142,6 @@ export default class ObdReader extends Component {
           }
         })
       }
-      console.log('hola')
       await AsyncStorage.multiRemove(keys)
       this.setState({
         pendingTroubleCodes: [],

@@ -40,6 +40,12 @@ export default class Info extends Component {
             })
         }
     }
+    cambiarAsignado = () => {
+        this.getUserInfo()
+        this.setState({
+            asignado: !this.state.asignado
+        })
+    }
 
     render() {
         return (<View>
@@ -48,11 +54,11 @@ export default class Info extends Component {
                     <Text style={styles.text} >Usted está asignado al vehículo con patente</Text>
                     <Text style={styles.patente}>{global.patente}</Text>
                     <Text style={[styles.text, {marginTop:40, fontSize:20}]} >Kilometros recorridos del vehículo: {global.km} Km</Text>
-                    <Desasignacion desasignar={this.props.desasignar}/>
+                    <Desasignacion desasignar={this.props.desasignar} cambiarEstado={this.cambiarAsignado}/>
                 </View> :
                 <View style={{ justifyContent: "center", marginLeft: 15, marginRight: 15 }}>
                     <Text style={{ textAlign: "center", fontFamily: "Roboto-Bold", fontSize: 24, color: "#767676" }} >Ingrese la patente del vehículo al cual se quiera asignar</Text>
-                    <Asignacion/>
+                    <Asignacion cambiarEstado={this.cambiarAsignado}/>
                 </View>
             }
         </View>

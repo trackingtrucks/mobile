@@ -31,6 +31,7 @@ class Asignacion extends Component {
                     }
                     )
                 global.asignado = true
+                this.props.cambiarEstado()
                 console.log("res:" + res.data.message)
             }
             catch (error) {
@@ -79,6 +80,7 @@ class Desasignacion extends Component {
                     }
                     )
                 global.asignado = false
+                this.props.cambiarEstado()
                 console.log("Desasignado pa")
             }
             catch (error) {

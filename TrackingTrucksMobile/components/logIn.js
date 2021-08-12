@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator
 } from 'react-native';
 import Config from './Config'
 import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
@@ -19,12 +20,16 @@ class Login extends Component {
   state = {
     password: 'contraseña',
     email: 'conductor@gmail.com',
-    disableButton: false
+    disableButton: false,
+    isLoading: false
   }
   render() {
     const { navigation } = this.props
     const pressLogHandler = async () => {
-      this.setState({ disableButton: true })
+      this.setState({ 
+        disableButton: true,
+        isLoading: true
+      })
       if (this.state.disableButton) return console.log("disabled!!");
       try {
         const res = await axios.post(Config.API_URL + '/auth/login', {
@@ -37,6 +42,9 @@ class Login extends Component {
         global.at = res.data.accessToken
         this.setState({ disableButton: false })
         navigation.navigate('Home')
+        this.setState({
+          isLoading:false
+        })
       } catch (error) {
         this.setState({ disableButton: false })
         console.log(error.response.data.message || error.message)
@@ -81,7 +89,8 @@ class Login extends Component {
             disabled={this.state.disableButton}
             activeOpacity={this.state.disableButton ? 1 : 0.7}
           >
-            <Text style={styles.logText} onPress={pressLogHandler}>Iniciar Sesion</Text>
+            {!this.state.isLoading && <Text style={styles.logText} onPress={pressLogHandler}>Iniciar Sesion</Text>}
+            {this.state.isLoading && <ActivityIndicator color="#fff" sixe="small" />}
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.forgot}
@@ -138,7 +147,9 @@ const styles = StyleSheet.create({
   logButton: {
     backgroundColor: "rgba(131, 0, 0, 1)",
     borderRadius: 9,
-    padding: 15,
+    paddingTop: 15,
+    paddingBottom:15,
+    minWidth:263,
     paddingHorizontal: 70,
     marginTop: "15%"
   },
