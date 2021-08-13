@@ -46,7 +46,7 @@ export default class Info extends Component {
             this.setState({
                 asignado: !this.state.asignado
             })
-        }, 1000);
+        }, 2000);
     }
 
     render() {
