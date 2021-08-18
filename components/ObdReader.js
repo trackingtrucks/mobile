@@ -54,7 +54,6 @@ export default class ObdReader extends Component {
     obd2.stopLiveData();
     this.btStatusListener.remove();
     this.obdStatusListener.remove();
-    this.dataSend()
   }
 
   onReady() {
@@ -106,33 +105,36 @@ export default class ObdReader extends Component {
 
   dataSend = async () => {
     try {
+      console.log("A");
       this.state.pendingTroubleCodes.sort()
       this.state.knownTroubleCodes.sort()
       if (this.state.pendingTroubleCodes.length == 0) {
+        console.log("B");
         const res = await axios.post(Config.API_URL + '/data', {
-          "fuelLevel": JSON.parse(parseInt(await AsyncStorage.getItem('fuel')).replace(/'/g,`"`)),
-          "RPM": JSON.parse(parseInt(await AsyncStorage.getItem('rpm')).replace(/'/g,`"`)),
-          "speed": JSON.parse(parseInt(await AsyncStorage.getItem('speed')).replace(/'/g,`"`)),
-          "coolantTemperature": JSON.parse(parseInt(await AsyncStorage.getItem('coolant')).replace(/'/g,`"`)),
+          "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g,`"`)),
+          "RPM": JSON.parse((await AsyncStorage.getItem("rpm")).replace(/'/g,`"`)),
+          "speed": JSON.parse((await AsyncStorage.getItem("speed")).replace(/'/g,`"`)),
+          "coolantTemperature": JSON.parse((await AsyncStorage.getItem("coolant")).replace(/'/g,`"`)),
           "kilometrosRecorridos": this.state.kmsDone
         }, {
           headers: {
             'Content-Type': 'application/json',
-            "x-access-token": global.accessToken,
+            "x-access-token": global.at,
           }
         })
         this.setState({
           errShown: false
         })
+        console.log("C");
       } else if (JSON.stringify(this.state.pendingTroubleCodes) === JSON.stringify(this.state.knownTroubleCodes)) {
         this.setState({
           errShown: true
         })
         const res = await axios.post(Config.API_URL + '/data', {
-          "fuelLevel": JSON.parse(parseInt(await AsyncStorage.getItem('fuel')).replace(/'/g,`"`)),
-          "RPM": JSON.parse(parseInt(await AsyncStorage.getItem('rpm')).replace(/'/g,`"`)),
-          "speed": JSON.parse(parseInt(await AsyncStorage.getItem('speed')).replace(/'/g,`"`)),
-          "coolantTemperature": JSON.parse(parseInt(await AsyncStorage.getItem('coolant')).replace(/'/g,`"`)),
+          "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g,`"`)),
+          "RPM": JSON.parse((await AsyncStorage.getItem("rpm")).replace(/'/g,`"`)),
+          "speed": JSON.parse((await AsyncStorage.getItem("speed")).replace(/'/g,`"`)),
+          "coolantTemperature": JSON.parse((await AsyncStorage.getItem("coolant")).replace(/'/g,`"`)),
           "kilometrosRecorridos": this.state.kmsDone,
           "pendingTroubleCodes": this.state.pendingTroubleCodes
         }, {
@@ -152,7 +154,7 @@ export default class ObdReader extends Component {
       console.log(error.response.data.message || error.message)
       Alert.alert(
         "Error",
-        error.response.data.message,
+        /*error.response.data.message ,*/"hola",
         [
           { text: 'OK', onPress: () => { } },
         ]
@@ -175,25 +177,25 @@ export default class ObdReader extends Component {
     if(data.cmdID != null){
       if (data.cmdID === 'ENGINE_RPM') {
         this.setState({
-          rpm: data.cmdResult
+          rpm: parseInt(data.cmdResult)
         });
         await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
       }
       if (data.cmdID === 'SPEED') {
         this.setState({
-          speed: data.cmdResult,
+          speed: parseInt(data.cmdResult),
         });
         await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
       }
       if (data.cmdID === 'FUEL_LEVEL') {
         this.setState({
-          fuelLevel: data.cmdResult,
+          fuelLevel: parseInt(data.cmdResult),
         });
         await AsyncStorage.mergeItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
       }
       if (data.cmdID === 'ENGINE_COOLANT_TEMP') {
         this.setState({
-          engineCoolantTemperature: data.cmdResult,
+          engineCoolantTemperature: parseInt(data.cmdResult),
         });
         await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
       }
@@ -215,13 +217,27 @@ export default class ObdReader extends Component {
   scan = async () => {
     this.startLiveData();
   }
-
-  test = async () => {
+  
+  dataSendTest = async() => {
+    await AsyncStorage.setItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
+    await AsyncStorage.setItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
+    await AsyncStorage.setItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
+    await AsyncStorage.setItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
+    await AsyncStorage.mergeItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
+    await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
+    await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
+    await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
+    this.dataSend()
   }
 
   render() {
     return (
       <View>
+        <TouchableOpacity onPress={this.scan} style={{backgroundColor:"#fa9"}}>
+          <Text>
+            Scanear
+          </Text>
+        </TouchableOpacity>
         <Info
           rpm={this.state.rpm}
           speed={this.state.speed}
@@ -241,7 +257,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#DDDDDD",
     padding: 10,
     textAlign: "center",
-    display: "flex"
+    display: "flex",
   },
   card: {
     backgroundColor: "rgba(227, 227, 227, 1)",

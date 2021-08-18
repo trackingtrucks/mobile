@@ -16,7 +16,7 @@ class Home extends Component {
     constructor(props) {
         super()
         this.state = {
-            turnoShown:false,
+            turnoShown: false,
             infoShown: true
         }
     }
@@ -24,23 +24,25 @@ class Home extends Component {
     render() {
         const renderTurno = () => {
             this.setState({
-                infoShown:false,
+                infoShown: false,
                 turnoShown: true
             })
         }
 
         const renderInfo = () => {
             this.setState({
-                infoShown:true,
+                infoShown: true,
                 turnoShown: false
             })
         }
 
         return (
             <View style={styles.container}>
-                <HomeHeader renderInfo={renderInfo} renderTurno={renderTurno} navigation={this.props} />
-                {this.state.turnoShown ?  <Turno /> : null}
-                {this.state.infoShown ?  <ObdReader /> : null}
+                <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%" }}>
+                    <HomeHeader renderInfo={renderInfo} renderTurno={renderTurno} navigation={this.props} />
+                    {this.state.turnoShown ? <Turno /> : null}
+                    {this.state.infoShown ? <ObdReader /> : null}
+                </ImageBackground>
             </View>
         )
     }

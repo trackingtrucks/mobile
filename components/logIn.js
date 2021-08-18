@@ -9,6 +9,7 @@ import {
   Alert,
   AsyncStorage,
   ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 import Config from './Config'
 import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
@@ -77,7 +78,7 @@ class Login extends Component {
       logIn()
     }
 
-    const newPassHandler = async() => {
+    const newPassHandler = async () => {
       try {
         const res = await axios.post(Config.API_URL + '/user/restablecer', {
           email: this.state.emailNewPass,
@@ -104,73 +105,77 @@ class Login extends Component {
 
     return (
       <View>
-        <View style={styles.container}>
-          <Text style={styles.textTitle}>¡Bienvenido!</Text>
-          <Text style={styles.textLogIn}>Inicio de sesión</Text>
-          <View style={styles.inputsContainer}>
-            <Text style={styles.mail} >Mail </Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(e) => this.setState({ email: e })}
-              value={this.state.email}
-            />
-            <Text style={styles.mail} >Contraseña</Text>
-            <TextInput
-              style={styles.input}
-              value={this.state.password}
-              onChangeText={(e) => {
-                this.setState({ password: e })
-              }}
-            />
-          </View>
-          <TouchableOpacity
-            style={styles.logButton}
-            disabled={this.state.disableButton}
-            activeOpacity={this.state.disableButton ? 1 : 0.7}
-          >
-            {!this.state.isLoading && <Text style={styles.logText} onPress={pressLogHandler}>Iniciar Sesion</Text>}
-            {this.state.isLoading && <ActivityIndicator color="#fff" sixe="small" />}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.forgot}
-            onPress={openModal}
-          >
-            <Text style={styles.forgotText}>¿Olvidaste tu contraseña?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.register}
-          >
-            <Text style={styles.registerText}>¿Todavía no tenes cuenta? Registrate</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.bottom} >
-          <TouchableOpacity style={styles.arrow} onPress={pressBackHandler}>
-            <Arrow width={20} height={19} />
-          </TouchableOpacity>
-          <BlackLogo width={39} height={75} style={styles.logo}></BlackLogo>
-        </View>
-        <MyModal visible={this.state.visible}>
-          <TouchableOpacity onPress={closeModal} style={{ height: "100%", width: "100%", position: "absolute" }} >
-          </TouchableOpacity>
-          <View style={styles.newPass}>
-            <Text style={styles.newPassText}>
-              Nueva contraseña
-              </Text>
-            <Text style={styles.newPassContent}>
-              Ingrese su mail para recibir un enlace para reestablecer su contraseña
-            </Text>
-            <TextInput style={styles.inputTextPass} onChangeText={(e) => {
-                this.setState({ emailNewPass: e })
-              }}/>
-            <View>
-              <TouchableOpacity style={styles.newPassButton} onPress={newPassHandler}>
-                <Text style={{ color: "#fff", textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
-                  Enviar
-              </Text>
-              </TouchableOpacity>
+        <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%"}}>
+          <View style={styles.container}>
+            <Text style={styles.textTitle}>¡Bienvenido!</Text>
+            <Text style={styles.textLogIn}>Inicio de sesión</Text>
+            <View style={styles.inputsContainer}>
+              <Text style={styles.mail} >Mail </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(e) => this.setState({ email: e })}
+                value={this.state.email}
+              />
+              <Text style={styles.mail} >Contraseña</Text>
+              <TextInput
+                style={styles.input}
+                value={this.state.password}
+                onChangeText={(e) => {
+                  this.setState({ password: e })
+                }}
+              />
             </View>
+            <TouchableOpacity
+              style={styles.logButton}
+              disabled={this.state.disableButton}
+              activeOpacity={this.state.disableButton ? 1 : 0.7}
+            >
+              {!this.state.isLoading && <Text style={styles.logText} onPress={pressLogHandler}>Iniciar Sesion</Text>}
+              {this.state.isLoading && <ActivityIndicator color="#fff" sixe="small" />}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.forgot}
+              onPress={openModal}
+            >
+              <Text style={styles.forgotText}>¿Olvidaste tu contraseña?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.register}
+            >
+              <Text style={styles.registerText}>¿Todavía no tenes cuenta? Registrate</Text>
+            </TouchableOpacity>
+
           </View>
-        </MyModal>
+          <View style={styles.bottom} >
+            <TouchableOpacity style={styles.arrow} onPress={pressBackHandler}>
+              <Arrow width={20} height={19} />
+            </TouchableOpacity>
+            <BlackLogo width={39} height={75} style={styles.logo}></BlackLogo>
+          </View>
+
+          <MyModal visible={this.state.visible}>
+            <TouchableOpacity onPress={closeModal} style={{ height: "100%", width: "100%", position: "absolute" }} >
+            </TouchableOpacity>
+            <View style={styles.newPass}>
+              <Text style={styles.newPassText}>
+                Nueva contraseña
+              </Text>
+              <Text style={styles.newPassContent}>
+                Ingrese su mail para recibir un enlace para reestablecer su contraseña
+              </Text>
+              <TextInput style={styles.inputTextPass} onChangeText={(e) => {
+                this.setState({ emailNewPass: e })
+              }} />
+              <View>
+                <TouchableOpacity style={styles.newPassButton} onPress={newPassHandler}>
+                  <Text style={{ color: "#fff", textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
+                    Enviar
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </MyModal>
+        </ImageBackground>
       </View>
 
     );
