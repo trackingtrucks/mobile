@@ -29,7 +29,7 @@ export default class ObdReader extends Component {
       speed: '0km\/h',
       fuelLevel: '0%',
       engineCoolantTemperature: '0C',
-      pendingTroubleCodes: ["00BE"],
+      pendingTroubleCodes: [],
       knownTroubleCodes: [],
       kmsDone: '0km',
       prueba: "",
@@ -126,10 +126,11 @@ export default class ObdReader extends Component {
           errShown: false
         })
         console.log("C");
-      } else if (JSON.stringify(this.state.pendingTroubleCodes) === JSON.stringify(this.state.knownTroubleCodes)) {
+      } else if (JSON.stringify(this.state.pendingTroubleCodes) !== JSON.stringify(this.state.knownTroubleCodes)) {
         this.setState({
           errShown: true
         })
+        console.log("Los pending: " +this.state.pendingTroubleCodes);
         const res = await axios.post(Config.API_URL + '/data', {
           "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g,`"`)),
           "RPM": JSON.parse((await AsyncStorage.getItem("rpm")).replace(/'/g,`"`)),
@@ -140,18 +141,18 @@ export default class ObdReader extends Component {
         }, {
           headers: {
             'Content-Type': 'application/json',
-            "x-access-token": global.accessToken,
+            "x-access-token": global.at,
           }
         })
       }
-      await AsyncStorage.multiRemove(keys)
-      this.setState({
-        pendingTroubleCodes: [],
-        knownTroubleCodes: this.state.pendingTroubleCodes
-      })
+      //await AsyncStorage.multiRemove(keys)
+      /*this.setState({
+        knownTroubleCodes: this.state.pendingTroubleCodes,
+        pendingTroubleCodes: []
+      })*/
     } catch (error) {
       this.setState({ disableButton: false })
-      console.log(error.response.data.message || error.message)
+      console.log(error.response.data.message)
       Alert.alert(
         "Error",
         /*error.response.data.message ,*/"hola",
@@ -205,6 +206,10 @@ export default class ObdReader extends Component {
         pendingTroubleCodes: data.cmdResult,
       });
     }
+  }
+
+  scan = async () => {
+    this.startLiveData();
     if (this.state.pendingTroubleCodes.length == 0) {
       setInterval(() => {
         this.dataSend()
@@ -212,10 +217,6 @@ export default class ObdReader extends Component {
     } else {
       this.dataSend()
     }
-  }
-
-  scan = async () => {
-    this.startLiveData();
   }
   
   dataSendTest = async() => {
@@ -227,15 +228,37 @@ export default class ObdReader extends Component {
     await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
     await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
     await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
-    this.dataSend()
+    if (this.state.pendingTroubleCodes.length == 0) {
+      setInterval(() => {
+        this.dataSend()
+        console.log("H")
+      }, 15000)
+    } else {
+      console.log("Length")
+      this.dataSend()
+    }
+    this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
+    console.log(this.state.knownTroubleCodes)
+  }
+
+  addError = () => {
+    this.setState({
+      pendingTroubleCodes: ["A"]
+    })
+    console.log(this.state.pendingTroubleCodes);
   }
 
   render() {
     return (
       <View>
-        <TouchableOpacity onPress={this.scan} style={{backgroundColor:"#fa9"}}>
+        <TouchableOpacity onPress={this.dataSendTest} style={{backgroundColor:"#fa9"}}>
           <Text>
             Scanear
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.addError} style={{backgroundColor:"#fa9", marginTop:20, paddingBottom:20}}>
+          <Text>
+            Agregar error
           </Text>
         </TouchableOpacity>
         <Info
