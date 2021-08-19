@@ -23,6 +23,12 @@ export default class Info extends Component {
             });
             global.patente = data.data.vehiculo.patente
             global.km = data.data.vehiculo.kilometraje
+            if(data.data.vehiculo.patente){
+                global.asignado = true
+            } else {
+                global.asignado = false
+            }
+            console.log(data.data.vehiculo)
         } catch (error) {
             console.log(error?.response?.data?.message || error.message);
         }
@@ -30,13 +36,14 @@ export default class Info extends Component {
 
     componentDidMount() {
         this.getUserInfo()
-        if (!global.patente) {
+        console.log(global.asignado)
+        if (global.asignado) {
             this.setState({
-                asignado: false
+                asignado: true
             })
         } else {
             this.setState({
-                asignado: true
+                asignado: false
             })
         }
     }

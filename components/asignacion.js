@@ -67,8 +67,8 @@ class Asignacion extends Component {
                         }}
                     />
                 </View>
-                <TouchableOpacity style={styles.asiButton}>
-                    {!this.state.isLoading && <Text style={styles.asiText} onPress={asignarHandler}>Asignarse</Text>}
+                <TouchableOpacity style={styles.asiButton} onPress={asignarHandler}>
+                    {!this.state.isLoading && <Text style={styles.asiText}>Asignarse</Text>}
                     {this.state.isLoading && <ActivityIndicator color="#fff" />}
                 </TouchableOpacity>
             </View>

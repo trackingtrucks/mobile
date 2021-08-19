@@ -129,8 +129,9 @@ class Login extends Component {
               style={styles.logButton}
               disabled={this.state.disableButton}
               activeOpacity={this.state.disableButton ? 1 : 0.7}
+              onPress={pressLogHandler}
             >
-              {!this.state.isLoading && <Text style={styles.logText} onPress={pressLogHandler}>Iniciar Sesion</Text>}
+              {!this.state.isLoading && <Text style={styles.logText}>Iniciar Sesion</Text>}
               {this.state.isLoading && <ActivityIndicator color="#fff" sixe="small" />}
             </TouchableOpacity>
             <TouchableOpacity

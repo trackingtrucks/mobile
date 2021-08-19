@@ -46,7 +46,7 @@ export default class Info extends Component {
                             <RpmLogo />
                         </View>
                         <Text style={styles.cardText2}>
-                            {" " + this.props.rpm}
+                            {" " + this.props.rpm} RPM
                         </Text>
                     </View>
                     <View elevation={5} style={styles.card}>
@@ -57,7 +57,7 @@ export default class Info extends Component {
                             <SpeedLogo />
                         </View>
                         <Text style={styles.cardText2}>
-                            {" " + this.props.speed}
+                            {" " + this.props.speed} Km/h
                         </Text>
                     </View>
                 </View>
@@ -70,7 +70,7 @@ export default class Info extends Component {
                             <FuelLogo />
                         </View>
                         <Text style={styles.cardText2}>
-                            {" " + this.props.fuelLevel}
+                            {" " + this.props.fuelLevel} %
                         </Text>
                     </View>
                     <View elevation={5} style={styles.card}>
@@ -81,7 +81,7 @@ export default class Info extends Component {
                             <CoolantLogo style={{ marginLeft: -8 }} />
                         </View>
                         <Text style={styles.cardText2}>
-                            {" " + this.props.coolant}
+                            {" " + this.props.coolant}°C
                         </Text>
                     </View>
                 </View>

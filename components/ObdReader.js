@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { Component, useState } from 'react'
-import { View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity, Alert, LogBox, TouchableHighlight,AsyncStorage } from 'react-native'
+import { View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity, Alert, LogBox, TouchableHighlight, AsyncStorage } from 'react-native'
 import MemoryStore from './memoryStore'
 import SpeedLogo from './multimedia/speed.svg'
 import RpmLogo from './multimedia/rpm.svg'
@@ -25,13 +25,13 @@ export default class ObdReader extends Component {
       btDeviceList: [],
       selectedBTDeviceIndex: 0,
       btDeviceListForUI: [],
-      rpm: '0RPM',
-      speed: '0km\/h',
-      fuelLevel: '0%',
-      engineCoolantTemperature: '0C',
+      rpm: '0',
+      speed: '0',
+      fuelLevel: '0',
+      engineCoolantTemperature: '0',
       pendingTroubleCodes: [],
       knownTroubleCodes: [],
-      kmsDone: '0km',
+      kmsDone: '0',
       prueba: "",
       errShown: false
     }
@@ -105,16 +105,14 @@ export default class ObdReader extends Component {
 
   dataSend = async () => {
     try {
-      console.log("A");
-      this.state.pendingTroubleCodes.sort()
-      this.state.knownTroubleCodes.sort()
+      //this.state.pendingTroubleCodes.sort()
+      //this.state.knownTroubleCodes.sort()
       if (this.state.pendingTroubleCodes.length == 0) {
-        console.log("B");
         const res = await axios.post(Config.API_URL + '/data', {
-          "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g,`"`)),
-          "RPM": JSON.parse((await AsyncStorage.getItem("rpm")).replace(/'/g,`"`)),
-          "speed": JSON.parse((await AsyncStorage.getItem("speed")).replace(/'/g,`"`)),
-          "coolantTemperature": JSON.parse((await AsyncStorage.getItem("coolant")).replace(/'/g,`"`)),
+          "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g, `"`)),
+          "RPM": JSON.parse((await AsyncStorage.getItem("rpm")).replace(/'/g, `"`)),
+          "speed": JSON.parse((await AsyncStorage.getItem("speed")).replace(/'/g, `"`)),
+          "coolantTemperature": JSON.parse((await AsyncStorage.getItem("coolant")).replace(/'/g, `"`)),
           "kilometrosRecorridos": this.state.kmsDone
         }, {
           headers: {
@@ -125,17 +123,16 @@ export default class ObdReader extends Component {
         this.setState({
           errShown: false
         })
-        console.log("C");
       } else if (JSON.stringify(this.state.pendingTroubleCodes) !== JSON.stringify(this.state.knownTroubleCodes)) {
         this.setState({
           errShown: true
         })
-        console.log("Los pending: " +this.state.pendingTroubleCodes);
+        console.log("Los pending: " + this.state.pendingTroubleCodes);
         const res = await axios.post(Config.API_URL + '/data', {
-          "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g,`"`)),
-          "RPM": JSON.parse((await AsyncStorage.getItem("rpm")).replace(/'/g,`"`)),
-          "speed": JSON.parse((await AsyncStorage.getItem("speed")).replace(/'/g,`"`)),
-          "coolantTemperature": JSON.parse((await AsyncStorage.getItem("coolant")).replace(/'/g,`"`)),
+          "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g, `"`)),
+          "RPM": JSON.parse((await AsyncStorage.getItem("rpm")).replace(/'/g, `"`)),
+          "speed": JSON.parse((await AsyncStorage.getItem("speed")).replace(/'/g, `"`)),
+          "coolantTemperature": JSON.parse((await AsyncStorage.getItem("coolant")).replace(/'/g, `"`)),
           "kilometrosRecorridos": this.state.kmsDone,
           "pendingTroubleCodes": this.state.pendingTroubleCodes
         }, {
@@ -146,16 +143,17 @@ export default class ObdReader extends Component {
         })
       }
       //await AsyncStorage.multiRemove(keys)
-      /*this.setState({
-        knownTroubleCodes: this.state.pendingTroubleCodes,
+      this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
+      this.setState({
         pendingTroubleCodes: []
-      })*/
+      })
+      console.log(this.state.pendingTroubleCodes);
     } catch (error) {
       this.setState({ disableButton: false })
       console.log(error.response.data.message)
       Alert.alert(
         "Error",
-        /*error.response.data.message ,*/"hola",
+        error.response.data.message ,"hola",
         [
           { text: 'OK', onPress: () => { } },
         ]
@@ -175,7 +173,7 @@ export default class ObdReader extends Component {
     this.setState({
       obd2Data: copyData,
     });
-    if(data.cmdID != null){
+    if (data.cmdID != null) {
       if (data.cmdID === 'ENGINE_RPM') {
         this.setState({
           rpm: parseInt(data.cmdResult)
@@ -200,7 +198,7 @@ export default class ObdReader extends Component {
         });
         await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
       }
-    } 
+    }
     if (data.cmdID === 'PENDING_TROUBLE_CODES') {
       this.setState({
         pendingTroubleCodes: data.cmdResult,
@@ -218,8 +216,9 @@ export default class ObdReader extends Component {
       this.dataSend()
     }
   }
-  
-  dataSendTest = async() => {
+
+  dataSendTest = async () => {
+    //this.startLiveData();
     await AsyncStorage.setItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
     await AsyncStorage.setItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
     await AsyncStorage.setItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
@@ -230,37 +229,40 @@ export default class ObdReader extends Component {
     await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
     if (this.state.pendingTroubleCodes.length == 0) {
       setInterval(() => {
+        console.log("Esta es la length1: " + this.state.pendingTroubleCodes.length);
         this.dataSend()
-        console.log("H")
-      }, 15000)
+      }, 5000)
     } else {
-      console.log("Length")
+      console.log("Esta es la length2: " + this.state.pendingTroubleCodes.length);
       this.dataSend()
     }
-    this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
-    console.log(this.state.knownTroubleCodes)
   }
 
   addError = () => {
     this.setState({
-      pendingTroubleCodes: ["A"]
+      pendingTroubleCodes: "Error"
     })
-    console.log(this.state.pendingTroubleCodes);
+    this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
+    console.log(this.state.knownTroubleCodes)
+    this.setState({
+      pendingTroubleCodes: []
+    })
   }
+
 
   render() {
     return (
       <View>
-        <TouchableOpacity onPress={this.dataSendTest} style={{backgroundColor:"#fa9"}}>
+        <TouchableOpacity onPress={this.dataSendTest} style={{ backgroundColor: "#fa9" }}>
           <Text>
-            Scanear
+            Envío de prueba
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.addError} style={{backgroundColor:"#fa9", marginTop:20, paddingBottom:20}}>
+        {/*<TouchableOpacity onPress={this.addError} style={{ backgroundColor: "#fa9", marginTop: 40 }}>
           <Text>
-            Agregar error
+            Error prueba
           </Text>
-        </TouchableOpacity>
+    </TouchableOpacity>*/}
         <Info
           rpm={this.state.rpm}
           speed={this.state.speed}

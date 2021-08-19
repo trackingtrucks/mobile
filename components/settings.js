@@ -19,7 +19,7 @@ class Settings extends Component {
                 await axios.delete(Config.API_URL + '/auth/token', {
                     headers: {
                         "x-refresh-token": global.refreshToken,
-                        "x-access-token": global.accessToken
+                        "x-access-token": global.at
                     }
                 })
                 
