@@ -20,8 +20,8 @@ import MyModal from './modal'
 
 class Login extends Component {
   state = {
-    password: '',
-    email: '',
+    password: 'contraseña',
+    email: 'conductor@gmail.com',
     disableButton: false,
     isLoading: false,
     visible: false,

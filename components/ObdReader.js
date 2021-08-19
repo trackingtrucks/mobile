@@ -106,7 +106,7 @@ export default class ObdReader extends Component {
   dataSend = async () => {
     try {
       //this.state.pendingTroubleCodes.sort()
-      //this.state.knownTroubleCodes.sort()
+      this.state.knownTroubleCodes.sort()
       if (this.state.pendingTroubleCodes.length == 0) {
         const res = await axios.post(Config.API_URL + '/data', {
           "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g, `"`)),
@@ -150,10 +150,10 @@ export default class ObdReader extends Component {
       console.log(this.state.pendingTroubleCodes);
     } catch (error) {
       this.setState({ disableButton: false })
-      console.log(error.response.data.message)
+      console.log(error)
       Alert.alert(
         "Error",
-        error.response.data.message ,"hola",
+        error.response.data.message, "hola",
         [
           { text: 'OK', onPress: () => { } },
         ]
@@ -227,14 +227,22 @@ export default class ObdReader extends Component {
     await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
     await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
     await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
+    let sendInterval
     if (this.state.pendingTroubleCodes.length == 0) {
-      setInterval(() => {
-        console.log("Esta es la length1: " + this.state.pendingTroubleCodes.length);
+      sendInterval = setInterval(() => {
+        if(this.state.pendingTroubleCodes.length != 0) {
+          clearInterval(sendInterval)
+        }
+        console.log("Esta es sin errores: " + this.state.pendingTroubleCodes.length);
         this.dataSend()
       }, 5000)
     } else {
-      console.log("Esta es la length2: " + this.state.pendingTroubleCodes.length);
+      clearInterval(sendInterval)
+      console.log("Esta es con errores: " + this.state.pendingTroubleCodes.length);
       this.dataSend()
+      setTimeout(() => {
+        this.dataSendTest()
+      }, 2000); 
     }
   }
 
@@ -243,10 +251,8 @@ export default class ObdReader extends Component {
       pendingTroubleCodes: "Error"
     })
     this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
-    console.log(this.state.knownTroubleCodes)
-    this.setState({
-      pendingTroubleCodes: []
-    })
+    console.log("Known: "+ this.state.knownTroubleCodes)
+    console.log("Pending: "+ this.state.pendingTroubleCodes)
   }
 
 
@@ -258,11 +264,11 @@ export default class ObdReader extends Component {
             Envío de prueba
           </Text>
         </TouchableOpacity>
-        {/*<TouchableOpacity onPress={this.addError} style={{ backgroundColor: "#fa9", marginTop: 40 }}>
+        <TouchableOpacity onPress={this.addError} style={{ backgroundColor: "#fa9", marginTop: 40 }}>
           <Text>
             Error prueba
           </Text>
-    </TouchableOpacity>*/}
+        </TouchableOpacity>
         <Info
           rpm={this.state.rpm}
           speed={this.state.speed}
