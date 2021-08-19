@@ -105,7 +105,6 @@ export default class ObdReader extends Component {
 
   dataSend = async () => {
     try {
-      //this.state.pendingTroubleCodes.sort()
       this.state.knownTroubleCodes.sort()
       if (this.state.pendingTroubleCodes.length == 0) {
         const res = await axios.post(Config.API_URL + '/data', {
@@ -142,7 +141,7 @@ export default class ObdReader extends Component {
           }
         })
       }
-      //await AsyncStorage.multiRemove(keys)
+      await AsyncStorage.multiRemove(keys)
       this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
       this.setState({
         pendingTroubleCodes: []
