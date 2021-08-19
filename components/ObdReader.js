@@ -230,11 +230,13 @@ export default class ObdReader extends Component {
     let sendInterval
     if (this.state.pendingTroubleCodes.length == 0) {
       sendInterval = setInterval(() => {
-        if(this.state.pendingTroubleCodes.length != 0) {
+        if (this.state.pendingTroubleCodes.length != 0) {
           clearInterval(sendInterval)
+          this.dataSendTest()
+        } else {
+          console.log("Esta es sin errores: " + this.state.pendingTroubleCodes.length);
+          this.dataSend()
         }
-        console.log("Esta es sin errores: " + this.state.pendingTroubleCodes.length);
-        this.dataSend()
       }, 5000)
     } else {
       clearInterval(sendInterval)
@@ -242,7 +244,7 @@ export default class ObdReader extends Component {
       this.dataSend()
       setTimeout(() => {
         this.dataSendTest()
-      }, 2000); 
+      }, 2000);
     }
   }
 
@@ -251,8 +253,8 @@ export default class ObdReader extends Component {
       pendingTroubleCodes: "Error"
     })
     this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
-    console.log("Known: "+ this.state.knownTroubleCodes)
-    console.log("Pending: "+ this.state.pendingTroubleCodes)
+    console.log("Known: " + this.state.knownTroubleCodes)
+    console.log("Pending: " + this.state.pendingTroubleCodes)
   }
 
 
