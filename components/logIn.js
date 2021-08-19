@@ -140,11 +140,6 @@ class Login extends Component {
             >
               <Text style={styles.forgotText}>¿Olvidaste tu contraseña?</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.register}
-            >
-              <Text style={styles.registerText}>¿Todavía no tenes cuenta? Registrate</Text>
-            </TouchableOpacity>
 
           </View>
           <View style={styles.bottom} >

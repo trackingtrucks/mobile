@@ -28,7 +28,6 @@ class Landing extends Component {
             >
               <Text style={styles.logText}>Iniciar Sesion</Text>
             </TouchableOpacity>
-            <Text style={styles.regText}>¿Todavía no tenes cuenta?</Text>
           </View>
         </ImageBackground>
       </View>
