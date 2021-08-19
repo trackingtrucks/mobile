@@ -245,8 +245,22 @@ export default class ObdReader extends Component {
     this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
     console.log("Known: " + this.state.knownTroubleCodes)
     console.log("Pending: " + this.state.pendingTroubleCodes)
+    this.setState({
+      errShown: true
+    })
   }
 
+  addError2 = () => {
+    this.setState({
+      pendingTroubleCodes: "Error2"
+    })
+    this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
+    console.log("Known: " + this.state.knownTroubleCodes)
+    console.log("Pending: " + this.state.pendingTroubleCodes)
+    this.setState({
+      errShown: true
+    })
+  }
   startTrip = () => {
     this.startLiveData()
     this.dataSendTest()
@@ -260,9 +274,14 @@ export default class ObdReader extends Component {
             Envío de prueba
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.addError} style={{ backgroundColor: "#fa9", marginTop: 40 }}>
+        <TouchableOpacity onPress={this.addError} style={{ backgroundColor: "#fa9", }}>
           <Text>
             Error prueba
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.addError2} style={{ backgroundColor: "#fa9", }}>
+          <Text>
+            Error prueba 2
           </Text>
         </TouchableOpacity>
         <Info
