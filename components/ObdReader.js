@@ -218,15 +218,6 @@ export default class ObdReader extends Component {
   }
 
   dataSendTest = async () => {
-    //this.startLiveData();
-    await AsyncStorage.setItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
-    await AsyncStorage.setItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
-    await AsyncStorage.setItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
-    await AsyncStorage.setItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
-    await AsyncStorage.mergeItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
-    await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
-    await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
-    await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
     let sendInterval
     if (this.state.pendingTroubleCodes.length == 0) {
       sendInterval = setInterval(() => {
@@ -237,7 +228,7 @@ export default class ObdReader extends Component {
           console.log("Esta es sin errores: " + this.state.pendingTroubleCodes.length);
           this.dataSend()
         }
-      }, 5000)
+      }, 300000)
     } else {
       clearInterval(sendInterval)
       console.log("Esta es con errores: " + this.state.pendingTroubleCodes.length);
@@ -257,11 +248,15 @@ export default class ObdReader extends Component {
     console.log("Pending: " + this.state.pendingTroubleCodes)
   }
 
+  startTrip = () => {
+    this.startLiveData()
+    this.dataSendTest()
+  }
 
   render() {
     return (
       <View>
-        <TouchableOpacity onPress={this.dataSendTest} style={{ backgroundColor: "#fa9" }}>
+        <TouchableOpacity onPress={this.startTrip} style={{ backgroundColor: "#fa9" }}>
           <Text>
             Envío de prueba
           </Text>
