@@ -46,7 +46,10 @@ class Login extends Component {
           isLoading: false
         })
       } catch (error) {
-        this.setState({ disableButton: false })
+        this.setState({
+          disableButton: false,
+          isLoading: false
+        })
         console.log(error.response.data.message || error.message)
         Alert.alert(
           "Error",
@@ -97,6 +100,7 @@ class Login extends Component {
           ]
         )
       }
+
     }
 
     const pressBackHandler = () => {
@@ -105,7 +109,7 @@ class Login extends Component {
 
     return (
       <View>
-        <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%"}}>
+        <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%" }}>
           <View style={styles.container}>
             <Text style={styles.textTitle}>¡Bienvenido!</Text>
             <Text style={styles.textLogIn}>Inicio de sesión</Text>
