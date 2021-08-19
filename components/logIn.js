@@ -20,8 +20,8 @@ import MyModal from './modal'
 
 class Login extends Component {
   state = {
-    password: 'contraseña',
-    email: 'conductor@gmail.com',
+    password: '',
+    email: '',
     disableButton: false,
     isLoading: false,
     visible: false,
@@ -120,6 +120,7 @@ class Login extends Component {
               <TextInput
                 style={styles.input}
                 value={this.state.password}
+                secureTextEntry={true}
                 onChangeText={(e) => {
                   this.setState({ password: e })
                 }}
