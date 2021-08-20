@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { Component, useState } from 'react'
-import { View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity, Alert, LogBox, TouchableHighlight, AsyncStorage } from 'react-native'
+import { View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity, Alert, LogBox, TouchableHighlight, AsyncStorage, TouchableNativeFeedback } from 'react-native'
 import MemoryStore from './memoryStore'
 import SpeedLogo from './multimedia/speed.svg'
 import RpmLogo from './multimedia/rpm.svg'
@@ -12,6 +12,7 @@ import Info from './info'
 const obd2 = require('react-native-obd2');
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 const keys = ['coolant', 'speed', 'rpm', 'fuel']
+let sendInterval
 
 export default class ObdReader extends Component {
   constructor(props) {
@@ -152,7 +153,7 @@ export default class ObdReader extends Component {
       console.log(error)
       Alert.alert(
         "Error",
-        error.response.data.message, "hola",
+        error?.response?.data?.message, "hola",
         [
           { text: 'OK', onPress: () => { } },
         ]
@@ -217,25 +218,34 @@ export default class ObdReader extends Component {
   }
 
   dataSendTest = async () => {
-    let sendInterval
+    /*await AsyncStorage.setItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
+    await AsyncStorage.setItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
+    await AsyncStorage.setItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
+    await AsyncStorage.setItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
+    await AsyncStorage.mergeItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
+    await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
+    await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
+    await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))*/
     if (this.state.pendingTroubleCodes.length == 0) {
       sendInterval = setInterval(() => {
-        if (this.state.pendingTroubleCodes.length != 0) {
-          clearInterval(sendInterval)
-          this.dataSendTest()
-        } else {
-          console.log("Esta es sin errores: " + this.state.pendingTroubleCodes.length);
-          this.dataSend()
-        }
+        console.log("Esta es sin errores: " + this.state.pendingTroubleCodes.length);
+        this.dataSend()
       }, 300000)
-    } else {
-      clearInterval(sendInterval)
+    }
+  }
+
+  errorDataSend = () => {
+    if (this.state.pendingTroubleCodes.length != 0) {
       console.log("Esta es con errores: " + this.state.pendingTroubleCodes.length);
       this.dataSend()
       setTimeout(() => {
+        clearInterval(sendInterval)
         this.dataSendTest()
       }, 2000);
     }
+    setTimeout(() => {
+      this.errorDataSend()
+    }, 2000);
   }
 
   addError = () => {
@@ -250,20 +260,10 @@ export default class ObdReader extends Component {
     })
   }
 
-  addError2 = () => {
-    this.setState({
-      pendingTroubleCodes: "Error2"
-    })
-    this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
-    console.log("Known: " + this.state.knownTroubleCodes)
-    console.log("Pending: " + this.state.pendingTroubleCodes)
-    this.setState({
-      errShown: true
-    })
-  }
   startTrip = () => {
-    this.startLiveData()
+    //this.startLiveData()
     this.dataSendTest()
+    this.errorDataSend()
   }
 
   render() {
@@ -271,17 +271,12 @@ export default class ObdReader extends Component {
       <View>
         <TouchableOpacity onPress={this.startTrip} style={{ backgroundColor: "#fa9" }}>
           <Text>
-            Envío de prueba
+            Iniciar viaje
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.addError} style={{ backgroundColor: "#fa9", }}>
+        <TouchableOpacity onPress={this.addError} style={{ backgroundColor: "#fa9", marginTop: 10 }}>
           <Text>
             Error prueba
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.addError2} style={{ backgroundColor: "#fa9", }}>
-          <Text>
-            Error prueba 2
           </Text>
         </TouchableOpacity>
         <Info

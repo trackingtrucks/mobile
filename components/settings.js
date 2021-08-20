@@ -31,8 +31,8 @@ class Settings extends Component {
         }
         return (
             <View style={styles.container}>
-                <TouchableOpacity style={styles.logButton}>
-                    <Text style={styles.logText} onPress={pressLogOutHandler}>Cerrar Sesión</Text>
+                <TouchableOpacity style={styles.logButton} onPress={pressLogOutHandler}>
+                    <Text style={styles.logText}>Cerrar Sesión</Text>
                 </TouchableOpacity>
             </View>
         )
