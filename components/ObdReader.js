@@ -261,7 +261,7 @@ export default class ObdReader extends Component {
   }
 
   startTrip = () => {
-    //this.startLiveData()
+    this.startLiveData()
     this.dataSendTest()
     this.errorDataSend()
   }

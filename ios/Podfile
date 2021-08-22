@@ -14,6 +14,10 @@ target 'TrackingTrucksMobile' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 
+  pod 'react-native-geolocation-service', :path => '../node_modules/react-native-geolocation-service'
+
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
   target 'TrackingTrucksMobileTests' do
     inherit! :complete
     # Pods for testing

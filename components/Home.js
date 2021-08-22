@@ -10,6 +10,7 @@ import {
 import ObdReader from './ObdReader'
 import HomeHeader from './homeHeader';
 import Turno from './turno'
+import LocationReader from './locationReader';
 
 class Home extends Component {
 
