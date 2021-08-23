@@ -26,13 +26,13 @@ export default class ObdReader extends Component {
       btDeviceList: [],
       selectedBTDeviceIndex: 0,
       btDeviceListForUI: [],
-      rpm: '0',
-      speed: '0',
-      fuelLevel: '0',
-      engineCoolantTemperature: '0',
+      rpm: 0,
+      speed: 0,
+      fuelLevel: 0,
+      engineCoolantTemperature: 0,
       pendingTroubleCodes: [],
       knownTroubleCodes: [],
-      kmsDone: '0',
+      kmsDone: 0,
       prueba: "",
       errShown: false
     }
@@ -260,7 +260,7 @@ export default class ObdReader extends Component {
     })
   }
 
-  startTrip = () => {
+  startTrip = async() => {
     this.startLiveData()
     this.dataSendTest()
     this.errorDataSend()
