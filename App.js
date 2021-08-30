@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
+  PermissionsAndroid
 } from 'react-native';
 import Landing from './components/landing'
 import { HomeStack, NotLoggedStack } from './routes/homeStack'
@@ -20,6 +21,12 @@ const App = () => {
 
   useEffect(() => {
     getData()
+    const checkGranted = async () => {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+    };
+    checkGranted();
   }, [])
 
   const getData = async () => {
