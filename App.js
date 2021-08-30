@@ -4,13 +4,16 @@ import {
   StyleSheet,
   Text,
   View,
-  PermissionsAndroid
+  PermissionsAndroid,
+  LogBox
 } from 'react-native';
 import Landing from './components/landing'
 import { HomeStack, NotLoggedStack } from './routes/homeStack'
 import axios from 'axios'
 import Config from './components/Config';
 import { AuthContextProvider } from './components/context/authContext';
+
+LogBox.ignoreLogs(['AsyncStorage has been extracted from'])
 
 const App = () => {
 
@@ -21,12 +24,6 @@ const App = () => {
 
   useEffect(() => {
     getData()
-    const checkGranted = async () => {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-    };
-    checkGranted();
   }, [])
 
   const getData = async () => {

@@ -39,7 +39,6 @@ class Home extends Component {
 
         return (
             <View style={styles.container}>
-                <LocationReader />
                 <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%" }}>
                     <HomeHeader renderInfo={renderInfo} renderTurno={renderTurno} navigation={this.props} />
                     {this.state.turnoShown ? <Turno /> : null}

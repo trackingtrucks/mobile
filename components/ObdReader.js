@@ -26,10 +26,10 @@ export default class ObdReader extends Component {
       btDeviceList: [],
       selectedBTDeviceIndex: 0,
       btDeviceListForUI: [],
-      rpm: 0,
-      speed: 0,
-      fuelLevel: 0,
-      engineCoolantTemperature: 0,
+      rpm: "a",
+      speed: "a",
+      fuelLevel: "a",
+      engineCoolantTemperature: "a",
       pendingTroubleCodes: [],
       knownTroubleCodes: [],
       kmsDone: 0,
@@ -107,7 +107,7 @@ export default class ObdReader extends Component {
   dataSend = async () => {
     try {
       this.state.knownTroubleCodes.sort()
-      if (this.state.pendingTroubleCodes.length == 0) {
+      if (this.state.pendingTroubleCodes.length == 0 && this.state.rpm != "a") {
         const res = await axios.post(Config.API_URL + '/data', {
           "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g, `"`)),
           "RPM": JSON.parse((await AsyncStorage.getItem("rpm")).replace(/'/g, `"`)),

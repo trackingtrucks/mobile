@@ -27,7 +27,7 @@ export default class LocationReader extends Component {
         console.log(error.code, error.message);
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );*/
+    );
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
         latitude: position.coords.latitude,
@@ -36,7 +36,7 @@ export default class LocationReader extends Component {
       })
     }, error => this.setState({
       error: error.message
-    }))
+    }))*/
   }
 
   render() {
