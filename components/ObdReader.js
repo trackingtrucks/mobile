@@ -26,10 +26,10 @@ export default class ObdReader extends Component {
       btDeviceList: [],
       selectedBTDeviceIndex: 0,
       btDeviceListForUI: [],
-      rpm: "a",
-      speed: "a",
-      fuelLevel: "a",
-      engineCoolantTemperature: "a",
+      rpm: 0,
+      speed: 0,
+      fuelLevel: 0,
+      engineCoolantTemperature: 0,
       pendingTroubleCodes: [],
       knownTroubleCodes: [],
       kmsDone: 0,
@@ -107,7 +107,7 @@ export default class ObdReader extends Component {
   dataSend = async () => {
     try {
       this.state.knownTroubleCodes.sort()
-      if (this.state.pendingTroubleCodes.length == 0 && this.state.rpm != "a") {
+      if (this.state.pendingTroubleCodes.length == 0) {
         const res = await axios.post(Config.API_URL + '/data', {
           "fuelLevel": JSON.parse((await AsyncStorage.getItem("fuel")).replace(/'/g, `"`)),
           "RPM": JSON.parse((await AsyncStorage.getItem("rpm")).replace(/'/g, `"`)),
@@ -162,12 +162,6 @@ export default class ObdReader extends Component {
   }
 
   obdLiveData = async (data) => {
-    if (await AsyncStorage.getItem('fuel') === null) {
-      await AsyncStorage.setItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
-      await AsyncStorage.setItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
-      await AsyncStorage.setItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
-      await AsyncStorage.setItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
-    }
     let copyData = JSON.parse(JSON.stringify(this.state.obd2Data));
     copyData[data.cmdID] = data;
     this.setState({
@@ -175,28 +169,40 @@ export default class ObdReader extends Component {
     });
     if (data.cmdID != null) {
       if (data.cmdID === 'ENGINE_RPM') {
+        if (await AsyncStorage.getItem('rpm') === null) {
+          await AsyncStorage.setItem('rpm', JSON.stringify({ [Date.now()]: parseInt(data.cmdResult) }))
+        }
         this.setState({
           rpm: parseInt(data.cmdResult)
         });
-        await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
+        await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: parseInt(data.cmdResult) }))
       }
       if (data.cmdID === 'SPEED') {
+        if (await AsyncStorage.getItem('speed') === null) {
+          await AsyncStorage.setItem('speed', JSON.stringify({ [Date.now()]: parseInt(data.cmdResult) }))
+        }
         this.setState({
           speed: parseInt(data.cmdResult),
         });
-        await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
+        await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: parseInt(data.cmdResult) }))
       }
       if (data.cmdID === 'FUEL_LEVEL') {
+        if (await AsyncStorage.getItem('fuel') === null) {
+          await AsyncStorage.setItem('fuel', JSON.stringify({ [Date.now()]: parseInt(data.cmdResult) }))
+        }
         this.setState({
           fuelLevel: parseInt(data.cmdResult),
         });
-        await AsyncStorage.mergeItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
+        await AsyncStorage.mergeItem('fuel', JSON.stringify({ [Date.now()]: parseInt(data.cmdResult) }))
       }
       if (data.cmdID === 'ENGINE_COOLANT_TEMP') {
+        if (await AsyncStorage.getItem('coolant') === null) {
+          await AsyncStorage.setItem('coolant', JSON.stringify({ [Date.now()]: parseInt(data.cmdResult) }))
+        }
         this.setState({
           engineCoolantTemperature: parseInt(data.cmdResult),
         });
-        await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
+        await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: parseInt(data.cmdResult) }))
       }
     }
     if (data.cmdID === 'PENDING_TROUBLE_CODES') {
@@ -260,7 +266,7 @@ export default class ObdReader extends Component {
     })
   }
 
-  startTrip = async() => {
+  startTrip = async () => {
     this.startLiveData()
     this.dataSendTest()
     this.errorDataSend()
