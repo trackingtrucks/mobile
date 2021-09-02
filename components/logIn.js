@@ -50,7 +50,7 @@ class Login extends Component {
           disableButton: false,
           isLoading: false
         })
-        console.log(error.response.data.message || error.message)
+        console.log(error?.response?.data?.message || error.message)
         Alert.alert(
           "Error",
           error.response.data.message,

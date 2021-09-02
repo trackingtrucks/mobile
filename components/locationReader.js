@@ -16,6 +16,7 @@ export default class LocationReader extends Component {
 
   hasLocationPermission = async () => {
     console.log("a")
+    
     if (Platform.OS === 'android' && Platform.Version < 23) {
       return true;
     }
@@ -45,6 +46,43 @@ export default class LocationReader extends Component {
     return false;
   };
 
+
+  requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "Cool Photo App Camera Permission",
+          message:
+            "Cool Photo App needs access to your camera " +
+            "so you can take awesome pictures.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        Alert.alert(
+        "Alert Title",
+        "My Alert Msg",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+      } else {
+        console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+  
+
   getLocation = async() => {
     if (await this.hasLocationPermission()) {
       Geolocation.getCurrentPosition(
@@ -66,14 +104,14 @@ export default class LocationReader extends Component {
   render() {
     return (
       <View>
-        <TouchableOpacity onPress={this.hasLocationPermission}>
+        <TouchableOpacity onPress={this.requestCameraPermission}>
           <Text>
-            Hola
+            boto6
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.getLocation}>
           <Text>
-            Hola
+            boton2
           </Text>
         </TouchableOpacity>
         <Text> textInComponent </Text>
