@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, PermissionsAndroid, ToastAndroid, Platform } from 'react-native'
+import { Text, View, TouchableOpacity, PermissionsAndroid, ToastAndroid, Platform,Button  } from 'react-native'
 import Geolocation from 'react-native-geolocation-service'
 import MapView, { Marker } from 'react-native-maps';
 
@@ -50,7 +50,7 @@ export default class LocationReader extends Component {
   requestCameraPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
           title: "Cool Photo App Camera Permission",
           message:
@@ -61,6 +61,8 @@ export default class LocationReader extends Component {
           buttonPositive: "OK"
         }
       );
+      console.log(await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION))
+      /*
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         Alert.alert(
         "Alert Title",
@@ -77,6 +79,7 @@ export default class LocationReader extends Component {
       } else {
         console.log("Camera permission denied");
       }
+*/
     } catch (err) {
       console.warn(err);
     }
@@ -104,11 +107,8 @@ export default class LocationReader extends Component {
   render() {
     return (
       <View>
-        <TouchableOpacity onPress={this.requestCameraPermission}>
-          <Text>
-            boto6
-          </Text>
-        </TouchableOpacity>
+        <Button  onPress={this.requestCameraPermission} title="BOTON">
+        </Button >
         <TouchableOpacity onPress={this.getLocation}>
           <Text>
             boton2
