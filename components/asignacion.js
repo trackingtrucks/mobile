@@ -89,7 +89,7 @@ class Desasignacion extends Component {
                 isLoading: true
             })
             try {
-                if (this.state.km >= global.km) {
+                if (this.state.km == global.km) {
                     const res = await axios
                         .delete(Config.API_URL + '/vehiculo', {
                             data: {

@@ -23,14 +23,16 @@ export default class Info extends Component {
             });
             global.patente = data.data.vehiculo.patente
             global.km = data.data.vehiculo.kilometraje
-            if(data.data.vehiculo.patente){
+            console.log(data.data);
+            
+            if (data.data.vehiculo.patente) {
                 global.asignado = true
             } else {
                 global.asignado = false
             }
             console.log(data.data.vehiculo)
         } catch (error) {
-            console.log(error?.response?.data?.message || error.message);
+            console.log(error.response.data.message || error.message);
         }
     }
 
@@ -60,7 +62,7 @@ export default class Info extends Component {
         return (<View>
             {this.state.asignado ?
                 <View style={{ justifyContent: "center", marginLeft: 15, marginRight: 15 }}>
-                    <Text style={styles.text} >Usted está asignado al vehículo con patente</Text>
+                    <Text style={styles.text} >Usted está asignado al vehículo con patente {global.patente}</Text>
                     <Text style={styles.patente}>{global.patente}</Text>
                     <Text style={[styles.text, { marginTop: 40, fontSize: 20 }]} >Kilometros recorridos del vehículo: {global.km} Km</Text>
                     <Desasignacion desasignar={this.props.desasignar} cambiarEstado={this.cambiarAsignado} />

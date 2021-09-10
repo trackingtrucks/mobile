@@ -5,6 +5,7 @@ import {
     View,
     ImageBackground,
     Image,
+    ScrollView,
     TouchableOpacity,
 } from 'react-native';
 import ObdReader from './ObdReader'
@@ -39,11 +40,12 @@ class Home extends Component {
 
         return (
             <View style={styles.container}>
-                <LocationReader />
                 <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%" }}>
-                    <HomeHeader renderInfo={renderInfo} renderTurno={renderTurno} navigation={this.props} />
-                    {this.state.turnoShown ? <Turno /> : null}
-                    {this.state.infoShown ? <ObdReader /> : null}
+                    <ScrollView style={{marginBottom:20}}>
+                        <HomeHeader renderInfo={renderInfo} renderTurno={renderTurno} navigation={this.props} />
+                        {this.state.turnoShown ? <Turno /> : null}
+                        {this.state.infoShown ? <ObdReader /> : null}
+                    </ScrollView>
                 </ImageBackground>
             </View>
         )
@@ -53,7 +55,6 @@ class Home extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 20,
     },
     header: {
         flexDirection: "row",

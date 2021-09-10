@@ -5,10 +5,14 @@ import {
     View,
     ImageBackground,
     Image,
+    TextInput,
     TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
 import Config from './Config';
+import HomeHeader from './homeHeader';
+import Logo from './multimedia/logo.svg'
+import Back from './multimedia/backArrow.svg'
 
 class Settings extends Component {
     render() {
@@ -22,18 +26,39 @@ class Settings extends Component {
                         "x-access-token": global.at
                     }
                 })
-                
+
                 navigation.navigate('Landing')
             }
             catch (error) {
-                console.error(error?.response?.data?.message || error.message)
+                console.error(error.response.data.message || error.message)
             }
         }
         return (
             <View style={styles.container}>
-                <TouchableOpacity style={styles.logButton} onPress={pressLogOutHandler}>
-                    <Text style={styles.logText}>Cerrar Sesión</Text>
-                </TouchableOpacity>
+                <View style={styles.header}>
+                    <View style={styles.settings}>
+                        <TouchableOpacity >
+                            <Back />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.logo}>
+                        <Logo width="65" height="65" />
+                    </View>
+                    <View style={styles.nombre}>
+                        <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
+                    </View>
+                </View>
+                <View>
+                    <Text>Nombre</Text>
+
+                    <Text>Rol</Text>
+                </View>
+                <View style={{ justifyContent: "flex-end", flex: 1 }}>
+                    <View style={{ alignItems: "center" }}>
+                        <View style={{ backgroundColor: '#A2A2A2', height: 1, width: "90%" }}></View>
+                    </View>
+                    <Text onPress={pressLogOutHandler} style={styles.logText}>Cerrar Sesión</Text>
+                </View>
             </View>
         )
     }
@@ -42,20 +67,31 @@ class Settings extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 20,
-    },
-    logButton: {
-        backgroundColor: "rgba(131, 0, 0, 1)",
-        borderRadius: 9,
-        padding: 15,
-        paddingHorizontal: 70,
-        marginTop: "15%"
     },
     logText: {
-        color: 'rgba(255, 255, 255, 1)',
+        color: '#D90000',
         fontSize: 20,
-        fontFamily: 'Roboto-Bold'
-    }
+        fontFamily: 'Roboto-Bold',
+        marginLeft: "5%",
+        marginBottom: "20%"
+    },
+    header: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    settings: {
+        justifyContent: 'flex-start',
+        flex: 1,
+        marginLeft: 20
+    },
+    nombre: {
+        flex: 1,
+        alignItems: "flex-end",
+        marginRight: 20,
+    },
+    logo: {
+        justifyContent: 'center',
+    },
 });
 
 export default Settings
