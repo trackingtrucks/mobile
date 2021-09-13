@@ -48,11 +48,6 @@ class Settings extends Component {
                         <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
                     </View>
                 </View>
-                <View>
-                    <Text>Nombre</Text>
-
-                    <Text>Rol</Text>
-                </View>
                 <View style={{ justifyContent: "flex-end", flex: 1 }}>
                     <View style={{ alignItems: "center" }}>
                         <View style={{ backgroundColor: '#A2A2A2', height: 1, width: "90%" }}></View>
