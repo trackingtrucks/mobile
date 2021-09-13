@@ -15,6 +15,10 @@ import Logo from './multimedia/logo.svg'
 import Back from './multimedia/backArrow.svg'
 
 class Settings extends Component {
+    state={
+        nombre: global.nombre
+    }
+   
     render() {
         const { navigation } = this.props
         const pressLogOutHandler = async () => {
@@ -48,10 +52,49 @@ class Settings extends Component {
                         <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
                     </View>
                 </View>
+                <View>
+                    <Text style={[styles.width, styles.textStyle]}>
+                        Nombre
+                    </Text>
+                    <TextInput 
+                        style={[styles.width, styles.input]}
+                        value={this.state.nombre}
+                        nativeID="nombre"
+                        onChangeText={(e) => this.setState({ nombre:e })}
+                    />
+                    <Text style={[styles.width, styles.textStyle]}>
+                        Apellido
+                    </Text>
+                    <TextInput 
+                        style={[styles.width, styles.input]}
+                        value={global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}
+                        onChangeText={(e) => this.setState({ nombre:e })}
+                    />
+                    <Text style={[styles.width, styles.textStyle]}>
+                        Contraseña actual
+                    </Text>
+                    <TextInput 
+                        style={[styles.width, styles.input]}
+                    />
+                    <Text style={[styles.width, styles.textStyle]}>
+                        Contraseña nueva
+                    </Text>
+                    <TextInput 
+                        style={[styles.width, styles.input]}
+                    />
+                    <Text style={[styles.width, styles.textStyle]}>
+                        Confirmar contraseña nueva
+                    </Text>
+                    <TextInput 
+                        style={[styles.width, styles.input]}
+                    />
+                </View>
                 <View style={{ justifyContent: "flex-end", flex: 1 }}>
-                    <View style={{ alignItems: "center" }}>
-                        <View style={{ backgroundColor: '#A2A2A2', height: 1, width: "90%" }}></View>
-                    </View>
+                    <TouchableOpacity style={[styles.width, styles.desasignar]}>
+                        <Text style={{color:"#830000", textAlign:"center", fontFamily:"Roboto-Medium", fontSize:18}}>
+                            Designación de vehículo
+                        </Text>
+                    </TouchableOpacity>
                     <Text onPress={pressLogOutHandler} style={styles.logText}>Cerrar Sesión</Text>
                 </View>
             </View>
@@ -87,6 +130,28 @@ const styles = StyleSheet.create({
     logo: {
         justifyContent: 'center',
     },
+    desasignar: {
+        backgroundColor:"#CCCACA",
+        borderRadius:7,
+        marginBottom:20,
+        padding:20,
+    },
+    width:{
+        marginLeft: "5%",
+        maxWidth:"90%"
+    },
+    input: {
+        backgroundColor:"#e3e3e3",
+        borderBottomColor:"#9D9D9D",
+        borderBottomWidth:1,
+        color:"#000"
+    },
+    textStyle: {
+        fontFamily:"Roboto-Bold",
+        fontSize:16,
+        marginBottom:"5%",
+        marginTop:"3%"
+    }
 });
 
 export default Settings
