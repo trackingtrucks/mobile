@@ -10,6 +10,8 @@ import ErrorLogo from './multimedia/error.svg'
 import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
 import MyModal from './modal'
+import axios from 'axios'
+import Config from './Config';
 
 export default class Info extends Component {
 
@@ -17,6 +19,26 @@ export default class Info extends Component {
         alertsShown: true,
         visible: true
     };
+
+    getTurnoInfo = async () => {
+        try {
+            const data = await axios.get(Config.API_URL + "/company/user/turnos", {
+                headers: {
+                    'x-access-token': global.at
+                }
+            });
+            console.log(data.data);
+            global.turnosPendientes = data.data.turnosPendientes
+            global.turnoActual = data.data.turnoActual
+            console.log(global.turnosPendientes[0].fechaYhora);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    componentDidMount(){
+        this.getTurnoInfo()
+    }
 
     render() {
         const alertPressHandler = () => {
@@ -35,6 +57,7 @@ export default class Info extends Component {
                 visible: false
             })
         }
+        
         return (
             <View >
                 <View style={styles.container}>

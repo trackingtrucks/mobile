@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Asignacion, Desasignacion } from './asignacion';
 import Config from './Config';
-
+import CardTurnos from './cardTurnos';
 
 export default class Info extends Component {
 
@@ -23,22 +23,20 @@ export default class Info extends Component {
             });
             global.patente = data.data.vehiculo.patente
             global.km = data.data.vehiculo.kilometraje
-            console.log(data.data);
-            
             if (data.data.vehiculo.patente) {
                 global.asignado = true
             } else {
                 global.asignado = false
             }
-            console.log(data.data.vehiculo)
         } catch (error) {
             console.log(error.response.data.message || error.message);
         }
     }
 
+    
+
     componentDidMount() {
         this.getUserInfo()
-        console.log(global.asignado)
         if (global.asignado) {
             this.setState({
                 asignado: true
@@ -59,36 +57,39 @@ export default class Info extends Component {
     }
 
     render() {
-        return (<View>
-            {this.state.asignado ?
-                <View style={{ justifyContent: "center", marginLeft: 15, marginRight: 15 }}>
-                    <Text style={styles.text} >Usted está asignado al vehículo con patente {global.patente}</Text>
-                    <Text style={styles.patente}>{global.patente}</Text>
-                    <Text style={[styles.text, { marginTop: 40, fontSize: 20 }]} >Kilometros recorridos del vehículo: {global.km} Km</Text>
-                    <Desasignacion desasignar={this.props.desasignar} cambiarEstado={this.cambiarAsignado} />
-                </View> :
-                <View style={{ justifyContent: "center", marginLeft: 15, marginRight: 15 }}>
-                    <Text style={{ textAlign: "center", fontFamily: "Roboto-Bold", fontSize: 24, color: "#767676" }} >Ingrese la patente del vehículo al cual se quiera asignar</Text>
-                    <Asignacion cambiarEstado={this.cambiarAsignado} />
-                </View>
-            }
-        </View>
+        return (
+            <View>
+                <CardTurnos />
+            </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    text: {
+    card: {
+        backgroundColor: "#C4C4C4",
+        width: "90%",
+        marginLeft: "5%",
+        borderColor: "#000",
+        borderWidth: 0.5,
+        borderRadius: 7,
+        marginBottom: "10%"
+    },
+    cardTitle: {
         textAlign: "center",
         fontFamily: "Roboto-Bold",
-        fontSize: 24,
-        color: "#767676"
+        fontSize: 18,
+        margin: 10
     },
-    patente: {
-        textAlign: "center",
-        fontFamily: "Roboto-Bold",
-        fontSize: 24,
-        color: "black",
-        marginTop: 40
+    cardSubtitle: {
+        color: "#830000",
+        fontFamily: "Roboto-Medium",
+        fontSize: 15,
+        marginBottom: 10,
+        marginLeft:10
     },
+    cardSubtitleText: {
+        fontFamily: "Roboto-Medium",
+        fontSize: 15,
+    }
 })
