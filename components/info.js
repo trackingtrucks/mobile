@@ -27,7 +27,6 @@ export default class Info extends Component {
                     'x-access-token': global.at
                 }
             });
-            console.log(data.data);
             global.turnosPendientes = data.data.turnosPendientes
             global.turnoActual = data.data.turnoActual
             console.log(global.turnosPendientes[0].fechaYhora);

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { Component, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
 import Config from './Config'
 
 export default class cardTurno extends Component {
@@ -11,14 +11,18 @@ export default class cardTurno extends Component {
             turnosPendientes: [],
             turnoActual: {},
             isTurnoActual: false,
-            codigoDeTurno: ""
+            isStartLoading: false,
+            isFinishLoading: false
         }
     }
 
-    startHanlder = async (i) => {
+    startHanlder = async (turno, i) => {
+        this.setState({
+            isStartLoading: i
+        })
         try {
             const res = await axios.patch(Config.API_URL + '/user/entrega/empezar', {
-                "codigoDeTurno": this.state.codigoDeTurno,
+                "codigoDeTurno": turno,
             }, {
                 headers: {
                     "Content-type": "application/json",
@@ -27,7 +31,22 @@ export default class cardTurno extends Component {
 
             }
             )
-            console.log(res)
+            try {
+                const data = await axios.get(Config.API_URL + "/company/user/turnos", {
+                    headers: {
+                        'x-access-token': global.at
+                    }
+                });
+                global.turnosPendientes = data.data.turnosPendientes
+                global.turnoActual = data.data.turnoActual
+                console.log(global.turnosPendientes[0].fechaYhora);
+            } catch (error) {
+                console.log(error.message);
+            }
+            this.setState({
+                isTurnoActual: true,
+                isStartLoading: null
+            })
         } catch (error) {
             console.log(error.response.data.message || error.message)
             Alert.alert(
@@ -37,19 +56,30 @@ export default class cardTurno extends Component {
                     { text: 'OK', onPress: () => { } },
                 ]
             )
+            this.setState({
+                isStartLoading: null,
+                isTurnoActual: false
+            })
         }
     }
 
     finishHandler = async () => {
+        this.setState({
+            isFinishLoading: true
+        })
         try {
-            const res = await axios.patch(Config.API_URL + '/user/entrega/terminar', {
+            const res = await axios.patch(Config.API_URL + '/user/entrega/terminar', {}, {
                 headers: {
                     "x-access-token": global.at
                 }
-            }
-            )
-            console.log(res)
+            })
+            this.setState({
+                isTurnoActual: false,
+                isFinishLoading: false
+            })
+            global.turnoActual = null;
         } catch (error) {
+            console.log(global.at)
             console.log(error.response.data.message || error.message)
             Alert.alert(
                 "Error",
@@ -58,6 +88,9 @@ export default class cardTurno extends Component {
                     { text: 'OK', onPress: () => { } },
                 ]
             )
+            this.setState({
+                isTurnoActual: true
+            })
         }
     }
 
@@ -96,9 +129,10 @@ export default class cardTurno extends Component {
                         <Text style={{ color: "#fff", textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
                             Finalizar entrega
                         </Text>
+                        {this.state.isFinishLoading && <ActivityIndicator color="#fff" sixe="small" />}
                     </TouchableOpacity>
                 </View> : null}
-                {global.turnosPendientes.map((turnos, i) => {
+                {global.turnosPendientes ? global.turnosPendientes.map((turnos, i) => {
                     return (
                         <View style={styles.card} key={i}>
                             <Text style={styles.cardTitle}>{turnos.nombreVendedor}</Text>
@@ -111,17 +145,16 @@ export default class cardTurno extends Component {
                                 <Text style={styles.cardSubtitleText}>{turnos.codigoDeTurno}</Text>
                             </View>
                             <TouchableOpacity style={styles.botonEntrega} onPress={async (i) => {
-                                this.setState({
-                                    codigoDeTurno: turnos.codigoDeTurno
-                                }); this.startHanlder();
+                                this.startHanlder(turnos.codigoDeTurno, i);
                             }}>
                                 <Text style={{ color: "#fff", textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
                                     Empezar entrega
                                 </Text>
+                                {this.state.isStartLoading == i ? <ActivityIndicator color="#fff" sixe="small" />: null}
                             </TouchableOpacity>
                         </View>
                     )
-                })}
+                }): null}
             </View>
         )
     }

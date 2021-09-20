@@ -14,6 +14,21 @@ export default class Info extends Component {
         }
     }
 
+    getTurnoInfo = async () => {
+        try {
+            const data = await axios.get(Config.API_URL + "/company/user/turnos", {
+                headers: {
+                    'x-access-token': global.at
+                }
+            });
+            global.turnosPendientes = data.data.turnosPendientes
+            global.turnoActual = data.data.turnoActual
+            console.log(global.turnosPendientes[0].fechaYhora);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
     getUserInfo = async () => {
         try {
             const data = await axios.get(Config.API_URL + "/user", {
@@ -37,6 +52,7 @@ export default class Info extends Component {
 
     componentDidMount() {
         this.getUserInfo()
+        this.getTurnoInfo()
         if (global.asignado) {
             this.setState({
                 asignado: true
