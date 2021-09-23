@@ -108,9 +108,9 @@ class Login extends Component {
     }
 
     return (
-      <View>
-        <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%" }}>
-          <View style={styles.container}>
+      <View style={styles.container}> 
+        <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%", width: "102%" }} imageStyle={{  position: 'absolute', left: "48%", top:"18%"}}>
+          <View >
             <Text style={styles.textTitle}>¡Bienvenido!</Text>
             <Text style={styles.textLogIn}>Inicio de sesión</Text>
             <View style={styles.inputsContainer}>
@@ -186,7 +186,9 @@ class Login extends Component {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    marginTop: 70
+    marginTop: 70,
+    backgroundColor:"white"
+
   },
   newPass: {
     backgroundColor: "#fff",

@@ -16,7 +16,7 @@ class Landing extends Component {
     }
     return (
       <View style={styles.container}>
-        <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={styles.backgroundImage}>
+        <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%", width: "102%" }} imageStyle={{  position: 'absolute', left: "48%", top:"18%"}}>
           <View style={styles.logo}>
             <Logo />
             <Text style={styles.textTitle}>Tracking Trucks</Text>
@@ -38,6 +38,7 @@ class Landing extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:"white"
   },
   regText: {
     color: 'rgba(131, 0, 0, 1)',

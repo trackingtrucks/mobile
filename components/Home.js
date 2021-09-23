@@ -40,8 +40,8 @@ class Home extends Component {
 
         return (
             <View style={styles.container}>
-                <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%" }}>
-                    <ScrollView style={{marginBottom:20}}>
+                <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%", width: "102%" }} imageStyle={{ resizeMode: 'cover', position: 'absolute', left: "48%", top: "18%" }}>
+                    <ScrollView style={{ marginBottom: 20 }}>
                         <HomeHeader renderInfo={renderInfo} renderTurno={renderTurno} navigation={this.props} />
                         {this.state.turnoShown ? <Turno /> : null}
                         {this.state.infoShown ? <ObdReader /> : null}
@@ -55,6 +55,7 @@ class Home extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:"white"
     },
     header: {
         flexDirection: "row",

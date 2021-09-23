@@ -8,7 +8,8 @@ import {
     TextInput,
     TouchableOpacity,
     Alert,
-    ScrollView
+    ScrollView,
+    KeyboardAvoidingView
 } from 'react-native';
 import axios from 'axios';
 import Config from './Config';
@@ -77,78 +78,80 @@ class Settings extends Component {
         }
 
         return (
-            <View style={styles.container}>
-                <ScrollView>
-                    <View style={styles.header}>
-                        <View style={styles.settings}>
-                            <TouchableOpacity onPress={goBack}>
-                                <Back />
+            <KeyboardAvoidingView style={styles.container} >
+                <ImageBackground  source={require('./multimedia/backgroundLogoSettings.jpg')} style={{ height: "100%", width:"103%" }} imageStyle={{resizeMode: 'stretch', position: 'absolute', left: "35%",}}>
+                    <ScrollView>
+                        <View style={styles.header}>
+                            <View style={styles.settings}>
+                                <TouchableOpacity onPress={goBack}>
+                                    <Back />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.logo}>
+                                <Logo width="65" height="65" />
+                            </View>
+                            <View style={styles.nombre}>
+                                <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
+                            </View>
+                        </View>
+                        <View>
+                            <Text style={{ textAlign: "center", fontFamily: "Montserrat-Bold", textDecorationLine: "underline", fontSize: 22, marginTop: 15, marginBottom: 20 }} >Configuración</Text>
+                            <Text style={[styles.width, styles.textStyle]}>
+                                Nombre
+                            </Text>
+                            <TextInput
+                                style={[styles.width, styles.input]}
+                                value={this.state.nombre}
+                                nativeID="nombre"
+                                onChangeText={(e) => this.setState({ nombre: e })}
+                            />
+                            <Text style={[styles.width, styles.textStyle]}>
+                                Apellido
+                            </Text>
+                            <TextInput
+                                style={[styles.width, styles.input]}
+                                value={global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}
+                                onChangeText={(e) => this.setState({ nombre: e })}
+                            />
+                            <Text style={[styles.width, styles.textStyle]}>
+                                Contraseña actual
+                            </Text>
+                            <TextInput
+                                style={[styles.width, styles.input]}
+                                onChangeText={(e) => { this.setState({ passwordActual: e }) }}
+                            />
+                            <Text style={[styles.width, styles.textStyle]}>
+                                Contraseña nueva
+                            </Text>
+                            <TextInput
+                                style={[styles.width, styles.input]}
+                                onChangeText={(e) => this.setState({ passwordNueva: e })}
+                            />
+                            <Text style={[styles.width, styles.textStyle]}>
+                                Confirmar contraseña nueva
+                            </Text>
+                            <TextInput
+                                style={[styles.width, styles.input]}
+                                onChangeText={(e) => this.setState({ passwordNueva: e })}
+                            />
+                        </View>
+                        <View style={{ justifyContent: "flex-end", flex: 1 }}>
+                            <TouchableOpacity style={[styles.width, styles.desasignar]} onPress={desasiganarHandler}>
+                                <Text style={{ color: "#830000", textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
+                                    {global.asignado ?  "Desasignación de vehículo" : "Asignación del vehículo"}
+                                </Text>
                             </TouchableOpacity>
+                            <TouchableOpacity style={styles.guardar} onPress={changePassword}>
+                                <Text style={{ color: "#fff", textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
+                                    Guardar
+                                </Text>
+                            </TouchableOpacity>
+                            <View style={{ width: "90%", borderBottomWidth: 1, marginLeft: "5%" }}></View>
+                            <Text onPress={pressLogOutHandler} style={styles.logText}>Cerrar Sesión</Text>
                         </View>
-                        <View style={styles.logo}>
-                            <Logo width="65" height="65" />
-                        </View>
-                        <View style={styles.nombre}>
-                            <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
-                        </View>
-                    </View>
-                    <View>
-                        <Text style={{textAlign:"center", fontFamily:"Montserrat-Bold", textDecorationLine:"underline", fontSize:22, marginTop:15, marginBottom:20}} >Configuración</Text>
-                        <Text style={[styles.width, styles.textStyle]}>
-                            Nombre
-                        </Text>
-                        <TextInput
-                            style={[styles.width, styles.input]}
-                            value={this.state.nombre}
-                            nativeID="nombre"
-                            onChangeText={(e) => this.setState({ nombre: e })}
-                        />
-                        <Text style={[styles.width, styles.textStyle]}>
-                            Apellido
-                        </Text>
-                        <TextInput
-                            style={[styles.width, styles.input]}
-                            value={global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}
-                            onChangeText={(e) => this.setState({ nombre: e })}
-                        />
-                        <Text style={[styles.width, styles.textStyle]}>
-                            Contraseña actual
-                        </Text>
-                        <TextInput
-                            style={[styles.width, styles.input]}
-                            onChangeText={(e) => { this.setState({ passwordActual: e }) }}
-                        />
-                        <Text style={[styles.width, styles.textStyle]}>
-                            Contraseña nueva
-                        </Text>
-                        <TextInput
-                            style={[styles.width, styles.input]}
-                            onChangeText={(e) => this.setState({ passwordNueva: e })}
-                        />
-                        <Text style={[styles.width, styles.textStyle]}>
-                            Confirmar contraseña nueva
-                        </Text>
-                        <TextInput
-                            style={[styles.width, styles.input]}
-                            onChangeText={(e) => this.setState({ passwordNueva: e })}
-                        />
-                    </View>
-                    <View style={{ justifyContent: "flex-end", flex: 1 }}>
-                        <TouchableOpacity style={[styles.width, styles.desasignar]} onPress={desasiganarHandler}>
-                            <Text style={{ color: "#830000", textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
-                                Desasignación de vehículo
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.guardar} onPress={changePassword}>
-                            <Text style={{ color: "#fff", textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
-                                Guardar
-                            </Text>
-                        </TouchableOpacity>
-                        <View style={{ width: "90%", borderBottomWidth: 1, marginLeft: "5%" }}></View>
-                        <Text onPress={pressLogOutHandler} style={styles.logText}>Cerrar Sesión</Text>
-                    </View>
-                </ScrollView>
-            </View>
+                    </ScrollView>
+                </ImageBackground>
+            </KeyboardAvoidingView >
         )
     }
 }
@@ -156,6 +159,7 @@ class Settings extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:"white"
     },
     guardar: {
         backgroundColor: "#830000",
@@ -196,14 +200,14 @@ const styles = StyleSheet.create({
         backgroundColor: "#CCCACA",
         borderRadius: 7,
         padding: 20,
-        marginTop:"5%"
+        marginTop: "5%"
     },
     width: {
         marginLeft: "5%",
         maxWidth: "90%"
     },
     input: {
-        backgroundColor: "#e3e3e3",
+        backgroundColor: "rgba(227, 227, 227, 0.3);",
         borderBottomColor: "#9D9D9D",
         borderBottomWidth: 1,
         color: "#000",

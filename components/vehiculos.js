@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native'
 import { Asignacion, Desasignacion } from './asignacion'
 import axios from 'axios';
 import Config from './Config';
@@ -24,7 +24,7 @@ export default class Vehiculos extends Component {
             });
             global.patente = data.data.vehiculo.patente
             global.km = data.data.vehiculo.kilometraje
-            console.log(global.asignado, this.state.asignado ,global.patente);
+            console.log(global.asignado, this.state.asignado, global.patente);
         } catch (error) {
             console.log(error?.response?.data?.message || error.message);
         }
@@ -58,21 +58,23 @@ export default class Vehiculos extends Component {
 
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <View style={styles.settings}>
-                        <TouchableOpacity onPress={goBack}>
-                            <Back />
-                        </TouchableOpacity>
+                <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%", width: "102%" }} imageStyle={{  position: 'absolute', left: "48%", top:"18%"}}>
+                    <View style={styles.header}>
+                        <View style={styles.settings}>
+                            <TouchableOpacity onPress={goBack}>
+                                <Back />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.logo}>
+                            <Logo width="65" height="65" />
+                        </View>
+                        <View style={styles.nombre}>
+                            <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
+                        </View>
                     </View>
-                    <View style={styles.logo}>
-                        <Logo width="65" height="65" />
-                    </View>
-                    <View style={styles.nombre}>
-                        <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
-                    </View>
-                </View>
-                {!this.state.asignado?
-                    <Asignacion cambiarEstado={this.cambiarAsignado} /> : <Desasignacion desasignar={this.props.desasignar} cambiarEstado={this.cambiarAsignado} />}
+                    {!this.state.asignado ?
+                        <Asignacion cambiarEstado={this.cambiarAsignado} /> : <Desasignacion desasignar={this.props.desasignar} cambiarEstado={this.cambiarAsignado} />}
+                </ImageBackground>
             </View>
         )
     }
@@ -81,6 +83,7 @@ export default class Vehiculos extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:"white"
     },
     header: {
         flexDirection: "row",
