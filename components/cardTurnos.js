@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { Component, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
+import { startDetecting } from 'react-native/Libraries/Utilities/PixelRatio'
 import Config from './Config'
 
 export default class cardTurno extends Component {
@@ -11,55 +12,64 @@ export default class cardTurno extends Component {
             turnosPendientes: [],
             turnoActual: {},
             isTurnoActual: false,
-            isStartLoading: false,
+            isStartLoading: '',
             isFinishLoading: false
         }
     }
 
     startHanlder = async (turno, i) => {
-        this.setState({
-            isStartLoading: i
-        })
-        try {
-            const res = await axios.patch(Config.API_URL + '/user/entrega/empezar', {
-                "codigoDeTurno": turno,
-            }, {
-                headers: {
-                    "Content-type": "application/json",
-                    "x-access-token": global.at
-                },
-
-            }
-            )
-            try {
-                const data = await axios.get(Config.API_URL + "/company/user/turnos", {
-                    headers: {
-                        'x-access-token': global.at
-                    }
-                });
-                global.turnosPendientes = data.data.turnosPendientes
-                global.turnoActual = data.data.turnoActual
-                console.log(global.turnosPendientes[0].fechaYhora);
-            } catch (error) {
-                console.log(error.message);
-            }
+        if (!this.state.isTurnoActual) {
             this.setState({
-                isTurnoActual: true,
-                isStartLoading: null
+                isStartLoading: turno
             })
-        } catch (error) {
-            console.log(error.response.data.message || error.message)
+            try {
+                const res = await axios.patch(Config.API_URL + '/user/entrega/empezar', {
+                    "codigoDeTurno": turno,
+                }, {
+                    headers: {
+                        "Content-type": "application/json",
+                        "x-access-token": global.at
+                    },
+
+                }
+                )
+                try {
+                    const data = await axios.get(Config.API_URL + "/company/user/turnos", {
+                        headers: {
+                            'x-access-token': global.at
+                        }
+                    });
+                    global.turnosPendientes = data.data.turnosPendientes
+                    global.turnoActual = data.data.turnoActual
+                } catch (error) {
+                    console.log(error.message);
+                }
+                this.setState({
+                    isTurnoActual: true,
+                    isStartLoading: ''
+                })
+            } catch (error) {
+                console.log(error.response.data.message || error.message)
+                Alert.alert(
+                    "Error",
+                    error.response.data.message,
+                    [
+                        { text: 'OK', onPress: () => { } },
+                    ]
+                )
+                this.setState({
+                    isStartLoading: '',
+                    isTurnoActual: false
+                })
+            }
+        } else {
             Alert.alert(
                 "Error",
-                error.response.data.message,
+                'Ya estás en una entrega',
                 [
                     { text: 'OK', onPress: () => { } },
                 ]
             )
-            this.setState({
-                isStartLoading: null,
-                isTurnoActual: false
-            })
         }
     }
 
@@ -150,11 +160,15 @@ export default class cardTurno extends Component {
                                 <Text style={{ color: "#fff", textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
                                     Empezar entrega
                                 </Text>
-                                {this.state.isStartLoading == i ? <ActivityIndicator color="#fff" sixe="small" />: null}
+                                {this.state.isStartLoading == turnos.codigoDeTurno ? <ActivityIndicator color="#fff" sixe="small" /> : null}
                             </TouchableOpacity>
                         </View>
                     )
-                }): null}
+                }) : null}
+                {global.turnosPendientes.length == 0 && !this.state.isTurnoActual ?
+                    <View>
+                        <Text style={{fontSize:24, textAlign:"center", fontFamily:"Roboto-Medium"}}>Aún no tienes ningún turno</Text>
+                    </View> : null}
             </View>
         )
     }

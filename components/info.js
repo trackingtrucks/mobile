@@ -29,7 +29,6 @@ export default class Info extends Component {
             });
             global.turnosPendientes = data.data.turnosPendientes
             global.turnoActual = data.data.turnoActual
-            console.log(global.turnosPendientes[0].fechaYhora);
         } catch (error) {
             console.log(error.message);
         }

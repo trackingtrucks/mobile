@@ -38,27 +38,32 @@ class Asignacion extends Component {
             }
             catch (error) {
                 this.setState({
-                    isLoading:false
+                    isLoading: false
                 })
 
                 Alert.alert(
                     "Error",
-                    error.response.data.message,
+                    error?.response?.data?.message,
                     [
                         { text: 'OK', onPress: () => { } },
                     ]
                 )
-                console.error("error:" + error.response.data.message)
+                console.log("error:" + error?.response?.data?.message)
             }
         }
         const asignarHandler = () => {
             this.setState({
-                isLoading:true
+                isLoading: true
             })
             asignar()
         }
         return (
             <View style={styles.container}>
+                <View>
+                    <Text style={{ textAlign: "center", fontFamily: "Roboto-Bold", color: "#767676", fontSize: 24, marginTop: "20%", marginBottom: "20%" }}>
+                        Ingrese la patente del vehículo al cual se quiera asignar
+                    </Text>
+                </View>
                 <View style={styles.inputsContainer}>
                     <TextInput
                         style={styles.input}
@@ -80,7 +85,7 @@ class Desasignacion extends Component {
 
     state = {
         isLoading: false,
-        km: global.km
+        km: 0
     }
 
     render() {
@@ -89,7 +94,7 @@ class Desasignacion extends Component {
                 isLoading: true
             })
             try {
-                if (this.state.km == global.km) {
+                if (this.state.km >= global.km) {
                     const res = await axios
                         .delete(Config.API_URL + '/vehiculo', {
                             data: {
@@ -121,19 +126,22 @@ class Desasignacion extends Component {
                 this.setState({
                     isLoading: false
                 })
-                console.log("error: " + error.response.data.message)
+                console.log("error: " + error)
             }
         }
         return (
             <View style={styles.container}>
-                <View style={styles.inputsContainer}>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(e) => {
-                            this.setState({ km: e })
-                        }}
-                    />
-                </View>
+                <Text style={{ textAlign: "center", fontFamily: "Roboto-Bold", color: "#767676", fontSize: 24, marginTop: "20%", marginHorizontal:"3%" }}>
+                    Usted está asignado al vehículo con patente
+                </Text>
+                <Text style={{ textAlign: "center", fontFamily: "Roboto-Bold", color: "#000000", fontSize: 24, marginTop:"10%"}}>{global.patente} </Text>
+                <Text style={{ textAlign: "center", fontFamily: "Roboto-Bold", color: "#767676", fontSize: 24, marginTop:"10%", marginBottom:"10%"}}>Kilometros recorridos del vehículo {global.km} </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(e) => {
+                        this.setState({ km: e })
+                    }}
+                />
                 <TouchableOpacity style={styles.asiButton} onPress={desasignarHandler}>
                     {!this.state.isLoading && <Text style={styles.asiText}>Desasignarme</Text>}
                     {this.state.isLoading && <ActivityIndicator color="#fff" size="small" />}
@@ -154,16 +162,17 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     input: {
-        height: 40,
-        margin: 12,
+        height: 50,
+        marginHorizontal: "10%",
         borderWidth: 1,
-        color: "black"
+        color: "black",
+        borderRadius: 6,
     },
     asiButton: {
         backgroundColor: "rgba(131, 0, 0, 1)",
         borderRadius: 9,
         padding: 15,
-        paddingHorizontal: 70,
+        marginHorizontal: "14%",
         marginTop: "15%"
     },
 });

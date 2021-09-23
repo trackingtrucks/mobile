@@ -4,7 +4,7 @@ import Landing from '../components/landing'
 import logIn from '../components/logIn'
 import Settings from "../components/settings";
 import Home from '../components/Home';
-
+import Vehiculos from "../components/vehiculos";
 import HomeHeader from "../components/homeHeader";
 import { CardStyleInterpolators } from "react-navigation-stack";
 import { Dimensions } from 'react-native'
@@ -41,6 +41,12 @@ const homeScreens = {
             headerShown: false
         }
     },
+    Vehiculos: {
+        screen: Vehiculos,
+        navigationOptions: {
+            headerShown: false
+        }
+    }
 }
 
 const notLoggedScreens = {
