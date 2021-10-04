@@ -108,9 +108,9 @@ class Login extends Component {
     }
 
     return (
-      <View style={styles.container}> 
-        <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%", width: "102%" }} imageStyle={{  position: 'absolute', left: "48%", top:"18%"}}>
-          <View >
+      <View style={styles.container}>
+        <ImageBackground source={require('./multimedia/backgroundLogo.jpg')} style={{ height: "100%", width: "102%" }} imageStyle={{ position: 'absolute', left: "48%", top: "18%" }}>
+          <View style={{alignItems:"center", marginTop:70}}>
             <Text style={styles.textTitle}>¡Bienvenido!</Text>
             <Text style={styles.textLogIn}>Inicio de sesión</Text>
             <View style={styles.inputsContainer}>
@@ -129,23 +129,22 @@ class Login extends Component {
                   this.setState({ password: e })
                 }}
               />
+              <TouchableOpacity
+                style={styles.logButton}
+                disabled={this.state.disableButton}
+                activeOpacity={this.state.disableButton ? 1 : 0.7}
+                onPress={pressLogHandler}
+              >
+                {!this.state.isLoading && <Text style={styles.logText}>Iniciar Sesion</Text>}
+                {this.state.isLoading && <ActivityIndicator color="#fff" sixe="small" />}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.forgot}
+                onPress={openModal}
+              >
+                <Text style={styles.forgotText}>¿Olvidaste tu contraseña?</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.logButton}
-              disabled={this.state.disableButton}
-              activeOpacity={this.state.disableButton ? 1 : 0.7}
-              onPress={pressLogHandler}
-            >
-              {!this.state.isLoading && <Text style={styles.logText}>Iniciar Sesion</Text>}
-              {this.state.isLoading && <ActivityIndicator color="#fff" sixe="small" />}
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.forgot}
-              onPress={openModal}
-            >
-              <Text style={styles.forgotText}>¿Olvidaste tu contraseña?</Text>
-            </TouchableOpacity>
-
           </View>
           <View style={styles.bottom} >
             <TouchableOpacity style={styles.arrow} onPress={pressBackHandler}>
@@ -186,8 +185,7 @@ class Login extends Component {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    marginTop: 70,
-    backgroundColor:"white"
+    backgroundColor: "white"
 
   },
   newPass: {
@@ -242,14 +240,15 @@ const styles = StyleSheet.create({
     margin: 25
   },
   forgotText: {
-    color: 'rgba(131, 0, 0, 1)'
+    color: 'rgba(131, 0, 0, 1)',
+    textAlign:"center"
   },
   registerText: {
     color: 'rgba(131, 0, 0, 1)'
   },
   textTitle: {
     fontSize: 36,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Roboto-Bold',
   },
   logButton: {
     backgroundColor: "rgba(131, 0, 0, 1)",
@@ -263,12 +262,13 @@ const styles = StyleSheet.create({
   logText: {
     color: 'rgba(255, 255, 255, 1)',
     fontSize: 20,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Roboto-Bold',
+    textAlign:"center"
   },
   textLogIn: {
     marginTop: 20,
     fontSize: 27,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Roboto-Bold',
   },
   input: {
     height: 40,
