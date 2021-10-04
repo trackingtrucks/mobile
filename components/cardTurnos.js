@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment-timezone'
 import React, { Component, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
 import { startDetecting } from 'react-native/Libraries/Utilities/PixelRatio'
@@ -128,8 +129,8 @@ export default class cardTurno extends Component {
                     </View>
                     <Text style={styles.cardTitle}>{global.turnoActual.nombreVendedor}</Text>
                     <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.cardSubtitle}>Fecha y hora:  </Text>
-                        <Text style={styles.cardSubtitleText}>{global.turnoActual.fechaYhora}</Text>
+                        <Text style={styles.cardSubtitle}>Fecha y hora: </Text>
+                        <Text style={styles.cardSubtitleText}>{moment(global.turnoActual.fechaYhora).format('l').replace(/\//g,"-") + " " + moment(global.turnoActual.fechaYhora).format('HH:mm')}</Text>
                     </View>
                     <View style={{ flexDirection: "row" }}>
                         <Text style={styles.cardSubtitle}>Código de turno: </Text>
@@ -148,7 +149,8 @@ export default class cardTurno extends Component {
                             <Text style={styles.cardTitle}>{turnos.nombreVendedor}</Text>
                             <View style={{ flexDirection: "row" }}>
                                 <Text style={styles.cardSubtitle}>Fecha y hora: </Text>
-                                <Text style={styles.cardSubtitleText}>{turnos.fechaYhora}</Text>
+                                <Text style={styles.cardSubtitleText}>{moment(turnos.fechaYhora).format('l').replace(/\//g,"-") + " " + moment(turnos.fechaYhora).format('HH:mm')}</Text>
+                                <Text>{}</Text>
                             </View>
                             <View style={{ flexDirection: "row" }}>
                                 <Text style={styles.cardSubtitle}>Código de turno: </Text>
