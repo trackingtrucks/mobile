@@ -266,6 +266,18 @@ export default class ObdReader extends Component {
     })
   }
 
+  addError2 = () => {
+    this.setState({
+      pendingTroubleCodes: "Error2"
+    })
+    this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
+    console.log("Known: " + this.state.knownTroubleCodes)
+    console.log("Pending: " + this.state.pendingTroubleCodes)
+    this.setState({
+      errShown: true
+    })
+  }
+
   startTrip = async () => {
     this.startLiveData()
     this.dataSendTest()
@@ -285,12 +297,17 @@ export default class ObdReader extends Component {
             Error prueba
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={this.addError2} style={{ backgroundColor: "#fa9", marginTop: 10 }}>
+          <Text>
+            Error prueba
+          </Text>
+        </TouchableOpacity>
         <Info
           rpm={this.state.rpm}
           speed={this.state.speed}
           fuelLevel={this.state.fuelLevel}
           coolant={this.state.engineCoolantTemperature}
-          trouble={this.state.pendingTroubleCodes}
+          trouble={this.state.knownTroubleCodes}
           errShown={this.state.errShown}
         />
       </View>
