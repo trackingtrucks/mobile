@@ -8,6 +8,7 @@ import RpmLogo from './multimedia/rpm.svg'
 import axios from 'axios'
 import Config from './Config'
 import Info from './info'
+import focus from '../jasons/focus.json'
 
 const obd2 = require('react-native-obd2');
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
@@ -207,7 +208,7 @@ export default class ObdReader extends Component {
     }
     if (data.cmdID === 'PENDING_TROUBLE_CODES') {
       this.setState({
-        pendingTroubleCodes: data.cmdResult,
+        pendingTroubleCodes: focus[data.cmdResult],
       });
     }
   }
@@ -224,14 +225,6 @@ export default class ObdReader extends Component {
   }
 
   dataSendTest = async () => {
-    /*await AsyncStorage.setItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
-    await AsyncStorage.setItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
-    await AsyncStorage.setItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
-    await AsyncStorage.setItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))
-    await AsyncStorage.mergeItem('fuel', JSON.stringify({ [Date.now()]: this.state.fuelLevel }))
-    await AsyncStorage.mergeItem('rpm', JSON.stringify({ [Date.now()]: this.state.rpm }))
-    await AsyncStorage.mergeItem('speed', JSON.stringify({ [Date.now()]: this.state.speed }))
-    await AsyncStorage.mergeItem('coolant', JSON.stringify({ [Date.now()]: this.state.engineCoolantTemperature }))*/
     if (this.state.pendingTroubleCodes.length == 0) {
       sendInterval = setInterval(() => {
         console.log("Esta es sin errores: " + this.state.pendingTroubleCodes.length);
@@ -255,8 +248,11 @@ export default class ObdReader extends Component {
   }
 
   addError = () => {
+    let data = "P1904"
+    data = focus[data]
+    console.log("data:" + data);
     this.setState({
-      pendingTroubleCodes: "Error"
+      pendingTroubleCodes: data
     })
     this.state.knownTroubleCodes.push(this.state.pendingTroubleCodes)
     console.log("Known: " + this.state.knownTroubleCodes)
