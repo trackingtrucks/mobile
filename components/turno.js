@@ -74,7 +74,7 @@ export default class Info extends Component {
     render() {
         return (
             <View>
-                <CardTurnos />
+                <CardTurnos startTrip={this.props.startTrip} />
             </View>
         )
     }

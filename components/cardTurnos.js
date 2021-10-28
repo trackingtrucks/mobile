@@ -19,6 +19,7 @@ export default class cardTurno extends Component {
     }
 
     startHanlder = async (turno, i) => {
+        this.props.startTrip
         if (!this.state.isTurnoActual) {
             this.setState({
                 isStartLoading: turno
@@ -27,12 +28,12 @@ export default class cardTurno extends Component {
                 const res = await axios.patch(Config.API_URL + '/user/entrega/empezar', {
                     "codigoDeTurno": turno,
                 }, {
-                    headers: {
-                        "Content-type": "application/json",
-                        "x-access-token": global.at
-                    },
+                        headers: {
+                            "Content-type": "application/json",
+                            "x-access-token": global.at
+                        },
 
-                }
+                    }
                 )
                 try {
                     const data = await axios.get(Config.API_URL + "/company/user/turnos", {
@@ -121,6 +122,11 @@ export default class cardTurno extends Component {
     render() {
         return (
             <View>
+                <TouchableOpacity onPress={this.props.startTrip} style={{ backgroundColor: "#fa9" }}>
+                    <Text>
+                        Iniciar viaje
+          </Text>
+                </TouchableOpacity>
                 {this.state.isTurnoActual ? <View style={styles.card}>
                     <View style={{ backgroundColor: "#00AB5C", borderRadius: 7, borderWidth: 0.5, padding: 4 }}>
                         <Text style={{ textAlign: "center", fontFamily: "Roboto-Medium", fontSize: 18 }}>
@@ -130,7 +136,7 @@ export default class cardTurno extends Component {
                     <Text style={styles.cardTitle}>{global.turnoActual.nombreVendedor}</Text>
                     <View style={{ flexDirection: "row" }}>
                         <Text style={styles.cardSubtitle}>Fecha y hora: </Text>
-                        <Text style={styles.cardSubtitleText}>{moment(global.turnoActual.fechaYhora).format('l').replace(/\//g,"-") + " " + moment(global.turnoActual.fechaYhora).format('HH:mm')}</Text>
+                        <Text style={styles.cardSubtitleText}>{moment(global.turnoActual.fechaYhora).format('l').replace(/\//g, "-") + " " + moment(global.turnoActual.fechaYhora).format('HH:mm')}</Text>
                     </View>
                     <View style={{ flexDirection: "row" }}>
                         <Text style={styles.cardSubtitle}>Código de turno: </Text>
@@ -149,7 +155,7 @@ export default class cardTurno extends Component {
                             <Text style={styles.cardTitle}>{turnos.nombreVendedor}</Text>
                             <View style={{ flexDirection: "row" }}>
                                 <Text style={styles.cardSubtitle}>Fecha y hora: </Text>
-                                <Text style={styles.cardSubtitleText}>{moment(turnos.fechaYhora).format('l').replace(/\//g,"-") + " " + moment(turnos.fechaYhora).format('HH:mm')}</Text>
+                                <Text style={styles.cardSubtitleText}>{moment(turnos.fechaYhora).format('l').replace(/\//g, "-") + " " + moment(turnos.fechaYhora).format('HH:mm')}</Text>
                                 <Text>{}</Text>
                             </View>
                             <View style={{ flexDirection: "row" }}>
@@ -169,7 +175,7 @@ export default class cardTurno extends Component {
                 }) : null}
                 {global.turnosPendientes.length == 0 && !this.state.isTurnoActual ?
                     <View>
-                        <Text style={{fontSize:24, textAlign:"center", fontFamily:"Roboto-Medium"}}>Aún no tienes ningún turno</Text>
+                        <Text style={{ fontSize: 24, textAlign: "center", fontFamily: "Roboto-Medium" }}>Aún no tienes ningún turno</Text>
                     </View> : null}
             </View>
         )

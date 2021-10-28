@@ -77,7 +77,7 @@ export default class HomeHeader extends Component {
                         <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
                     </View>
                 </View>
-                <View style={styles.buttonContainer}>
+                {global.asignado ? <View style={styles.buttonContainer}>
                     <View style={styles.buttonInfoContainer} >
                         <TouchableOpacity onPress={pressInfoHandler} style={[styles.buttonInfo, {
                             backgroundColor: this.state.infoColor,
@@ -105,7 +105,7 @@ export default class HomeHeader extends Component {
                             >Entregas</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View>: null }
             </View>
         )
     }
