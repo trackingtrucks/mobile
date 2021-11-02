@@ -47,7 +47,7 @@ export default class Info extends Component {
         }
     }
 
-    
+
 
     componentDidMount() {
         this.getUserInfo()
@@ -74,7 +74,13 @@ export default class Info extends Component {
     render() {
         return (
             <View>
-                <CardTurnos startTrip={this.props.startTrip} />
+                {this.state.asignado ? <CardTurnos startTrip={this.props.startTrip} /> :
+                    <View style={{ marginTop: "30%" }}>
+                        <Text style={{ fontFamily: "Roboto-Bold", fontSize: 24, textAlign: "center" }}>
+                            Para visualizar la información y las entregas de un vehículo, debe asignarse a uno en la configuración
+                        </Text>
+                    </View>
+                }
             </View>
         )
     }
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto-Medium",
         fontSize: 15,
         marginBottom: 10,
-        marginLeft:10
+        marginLeft: 10
     },
     cardSubtitleText: {
         fontFamily: "Roboto-Medium",

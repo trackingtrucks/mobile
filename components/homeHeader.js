@@ -28,7 +28,6 @@ export default class HomeHeader extends Component {
         }
     }
     render() {
-
         const { navigation } = this.props.navigation
         const pressBackHandler = () => {
             navigation.goBack()
@@ -37,7 +36,7 @@ export default class HomeHeader extends Component {
         const pressSettings = () => {
             navigation.navigate('Settings')
         }
-        
+
         const pressInfoHandler = () => {
             this.props.renderInfo()
             this.setState({
@@ -48,6 +47,25 @@ export default class HomeHeader extends Component {
                 borderInfoColor: "#830000",
                 borderTurnoColor: "#A6A6A6",
             })
+        }
+
+        const getUserInfo = async () => {
+            try {
+                const data = await axios.get(Config.API_URL + "/user", {
+                    headers: {
+                        'x-access-token': global.at
+                    }
+                });
+                if (data.data.vehiculo.patente) {
+                    global.asignado = true
+                } else {
+                    global.asignado = false
+                }
+                console.log("Asignado:", global.asignado);
+            } catch (error) {
+                console.log(error.response.data.message || error.message);
+                console.log("Asignado:", global.asignado);
+            }
         }
 
         const pressTurnoHandler = () => {
@@ -76,8 +94,7 @@ export default class HomeHeader extends Component {
                     <View style={styles.nombre}>
                         <Text style={{ textAlign: "center" }} >{global.nombre}{'\n'}{global.rol.charAt(0).toUpperCase() + global.rol.slice(1)}</Text>
                     </View>
-                </View>
-                {global.asignado ? <View style={styles.buttonContainer}>
+                </View><View style={styles.buttonContainer}>
                     <View style={styles.buttonInfoContainer} >
                         <TouchableOpacity onPress={pressInfoHandler} style={[styles.buttonInfo, {
                             backgroundColor: this.state.infoColor,
@@ -101,11 +118,11 @@ export default class HomeHeader extends Component {
                         }]}>
                             <Text style={{
                                 textAlign: "center", color: this.state.turnoTextColor, fontFamily: "Roboto-Medium", fontSize: 18
-                            }} 
+                            }}
                             >Entregas</Text>
                         </TouchableOpacity>
                     </View>
-                </View>: null }
+                </View>
             </View>
         )
     }

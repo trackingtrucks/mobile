@@ -293,11 +293,9 @@ class Home extends Component {
     }
 
     startTrip = async () => {
-        /*this.startLiveData()
+        this.startLiveData()
         this.dataSendTest()
-        this.errorDataSend()*/
-        console.log("hola");
-
+        this.errorDataSend()
     }
 
     render() {
