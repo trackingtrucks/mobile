@@ -36,6 +36,7 @@ export default class Info extends Component {
 
     componentDidMount(){
         this.getTurnoInfo()
+        console.log(this.props);
     }
 
     render() {
