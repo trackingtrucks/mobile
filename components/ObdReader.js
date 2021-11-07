@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { Component, useState } from 'react'
+import React, { Component, useReducer  } from 'react'
 import { View, Text, LogBox } from 'react-native'
 import Info from './info'
 import axios from 'axios'
@@ -45,13 +45,14 @@ export default class ObdReader extends Component {
 }
 
   render() {
+    
     return (
       <View>
         {this.state.asignado ? <Info
           rpm={this.props.rpm}
           speed={this.props.speed}
           fuelLevel={this.props.fuelLevel}
-          coolant={this.props.engineCoolantTemperature}
+          coolant={this.props.coolant}
           trouble={this.props.knownTroubleCodes}
           errShown={this.props.errShown}
         /> : 

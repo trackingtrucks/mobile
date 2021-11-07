@@ -247,7 +247,7 @@ class Home extends Component {
             sendInterval = setInterval(() => {
                 console.log("Esta es sin errores: " + this.state.pendingTroubleCodes.length);
                 this.dataSend()
-            }, 300000)
+            }, 30000)
         }
     }
 

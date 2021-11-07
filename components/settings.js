@@ -17,7 +17,10 @@ import HomeHeader from './homeHeader';
 import Logo from './multimedia/logo.svg'
 import Back from './multimedia/backArrow.svg'
 
+
+
 class Settings extends Component {
+    
     state = {
         nombre: global.nombre,
         passwordActual: '',
@@ -49,6 +52,7 @@ class Settings extends Component {
 
         const desasiganarHandler = () => {
             navigation.navigate('Vehiculos')
+            
         }
 
         const changePassword = async () => {
