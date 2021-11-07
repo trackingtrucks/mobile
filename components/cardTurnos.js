@@ -149,7 +149,7 @@ export default class cardTurno extends Component {
                         {this.state.isFinishLoading && <ActivityIndicator color="#fff" sixe="small" />}
                     </TouchableOpacity>
                 </View> : null}
-                {global.turnosPendientes ? global.turnosPendientes.map((turnos, i) => {
+                {global?.turnosPendientes && true ? global?.turnosPendientes.map((turnos, i) => {
                     return (
                         <View style={styles.card} key={i}>
                             <Text style={styles.cardTitle}>{turnos.nombreVendedor}</Text>
@@ -173,7 +173,7 @@ export default class cardTurno extends Component {
                         </View>
                     )
                 }) : null}
-                {global.turnosPendientes.length == 0 && !this.state.isTurnoActual ?
+                {global?.turnosPendientes?.length == 0 && !this.state.isTurnoActual ?
                     <View>
                         <Text style={{ fontSize: 24, textAlign: "center", fontFamily: "Roboto-Medium" }}>Aún no tienes ningún turno</Text>
                     </View> : null}
