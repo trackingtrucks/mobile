@@ -50,8 +50,6 @@ export default class Info extends Component {
 
 
     componentDidMount() {
-        console.log(global.asignado); 
-        console.log(this.state.asignado);
         this.getUserInfo()
         this.getTurnoInfo()
         if (global.asignado) {
@@ -63,7 +61,6 @@ export default class Info extends Component {
                 asignado: false
             })
         }
-        console.log("huola", this.state.asignado); 
     }
     cambiarAsignado = () => {
         this.getUserInfo()

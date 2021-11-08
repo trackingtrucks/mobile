@@ -37,7 +37,7 @@ const App = () => {
       setRefreshTokenActive(false)
     }
   }
-
+  console.disableYellowBox = true;
   return (
     <View style={styles.fondo}>
       <HomeStack />

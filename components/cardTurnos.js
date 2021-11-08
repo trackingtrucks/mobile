@@ -168,7 +168,7 @@ export default class cardTurno extends Component {
                         </View>
                     )
                 }) : null}
-                {global?.turnosPendientes?.length == 0 && !this.state.isTurnoActual ?
+                {global?.turnosPendientes.length == 0 && !this.state.isTurnoActual ?
                     <View>
                         <Text style={{ fontSize: 24, textAlign: "center", fontFamily: "Roboto-Medium" }}>Aún no tienes ningún turno</Text>
                     </View> : null}
